@@ -12,7 +12,10 @@ from flask import Flask, request, render_template, jsonify
 app = Flask(__name__)
 import requests
 
-
+@app.route('/play')
+def static_file():
+    print("P_LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYY -------->>>. ")
+    return render_template("play.html")
 
 @app.route("/", methods=['GET', 'POST'])
 def start():
@@ -27,11 +30,12 @@ def start():
         url = "https://api.jamendo.com/v3.0/oauth/grant";
         # url = "https://api.jamendo.com/v3.0/oauth/grant?client_id=cf25482b&code=d9582222ad5e8a87d2e83adabfeda461611082ea&client_secret=188d6185dc588dc181d326af289fb4be&grant_type=authorization_code&redirect_uri=http://localhost:3000/";
         # url = "https://api.jamendo.com/v3.0//playlists?client_id=59320324&format=jsonpretty&access_token=fde2fb4864bd9b690aaf13802574547f1c468a1d"
-        print(url)
+        print("\n\n ==>> s",request.json,  request.json["code"])
+
         myobj = {
-            'code':request.args.get("code"),
+            'code':  request.json["code"],
             'grant_type':'authorization_code',
-            'redirect_uri':'http://localhost:3000/',
+            'redirect_uri':'http://localhost:4567/',
             'client_secret':'188d6185dc588dc181d326af289fb4be',
             'client_id':'cf25482b'
         }
@@ -44,7 +48,7 @@ def start():
         print(x.text)
         result={}
         result["status"] = "ok"
-        result["access_token"] = x
+        result["access_token"] = x.text
         # result = main_server.getAnswerFromComponent(conf)
         print("result",result)
         return jsonify(result)
