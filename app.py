@@ -14,24 +14,14 @@ import requests
 
 @app.route('/play')
 def static_file():
-    print("P_LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYYYYYYYYYYYYYYYYYYYY -------->>>. ")
+   
     return render_template("play.html")
 
 @app.route("/", methods=['GET', 'POST'])
 def start():
     if(request.method == "POST"):
         print("\n\n PoST ---------------->>>>>>>>>>>>> ",request.args, request.args.get("code"), request.json)
-        # PATH2DB = "base.db"
-        # conf = {}
-        # main_server = Server(PATH2DB)
-        # conf["module"] = request.args.get("module")
-        # conf["action"] = request.args.get("action")
-        # conf["data"] = request.json
         url = "https://api.jamendo.com/v3.0/oauth/grant";
-        # url = "https://api.jamendo.com/v3.0/oauth/grant?client_id=cf25482b&code=d9582222ad5e8a87d2e83adabfeda461611082ea&client_secret=188d6185dc588dc181d326af289fb4be&grant_type=authorization_code&redirect_uri=http://localhost:3000/";
-        # url = "https://api.jamendo.com/v3.0//playlists?client_id=59320324&format=jsonpretty&access_token=fde2fb4864bd9b690aaf13802574547f1c468a1d"
-        print("\n\n ==>> s",request.json,  request.json["code"])
-
         myobj = {
             'code':  request.json["code"],
             'grant_type':'authorization_code',
@@ -39,18 +29,11 @@ def start():
             'client_secret':'188d6185dc588dc181d326af289fb4be',
             'client_id':'cf25482b'
         }
-        # url = 'https://api.jamendo.com/v3.0/oauth/authorize?client_id=cf25482b&redirect_uri=http://localhost:3000/&response_type=code'
-        #    <a href={`https://api.jamendo.com/v3.0/oauth/authorize?client_id=${conf._client_id}&redirect_uri=http://localhost:3000/&response_type=code`}>Регистрация</a>
-        # x = requests.get(url)
         x = requests.post(url, data = myobj)
-        # url = 'https://api.jamendo.com/v3.0/oauth/authorize?client_id=cf25482b'
-        # x = requests.get(url, data = myobj)
-        print(x.text)
+  
         result={}
         result["status"] = "ok"
         result["access_token"] = x.text
-        # result = main_server.getAnswerFromComponent(conf)
-        print("result",result)
         return jsonify(result)
 
     return render_template("index.html")
