@@ -4,9 +4,9 @@ python app.py -> localhost:4567
 
 # load static
 
-cd static/spoty
+cd static/spoty_web
 run: gulp build
 
 # configure
 
-static\spotify\src\typescript\settings.ts
+static\spotify_web\src\typescript\settings.ts

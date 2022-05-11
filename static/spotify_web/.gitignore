@@ -1,0 +1,8 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+**/*.js
+**/*.css
+
+# production
+/public/script/js/**/*.js
+/node_modules

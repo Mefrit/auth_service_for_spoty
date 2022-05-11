@@ -1,0 +1,80 @@
+@import "./colors.less";
+.menu {
+    width: 270px;
+    background-color: @black;
+
+    padding-top: 24px;
+    padding-left: 22px;
+    &__actions_playlist {
+        margin-top: 30px;
+    }
+    &__logo {
+        width: 120px;
+        padding-bottom: 25px;
+        svg {
+            color: @white;
+        }
+    }
+    &__actions {
+        margin-left: -5px;
+        padding-bottom: 20px;
+        list-style: none;
+    }
+    &__link {
+        text-decoration: none;
+        color: @btn_gray;
+    }
+    &__link_active {
+        color: @white;
+    }
+    &__action {
+        margin-bottom: 5px;
+        cursor: pointer;
+        font-weight: 900;
+        font-size: 0.725rem;
+        line-height: 1rem;
+        text-transform: none;
+        letter-spacing: normal;
+        display: flex;
+        align-items: center;
+        border: none;
+        padding: 5px;
+        background: none;
+    }
+    &__action:hover {
+        .menu__link {
+            color: @white;
+        }
+        .menu__image {
+            fill: @white;
+        }
+    }
+    &__image {
+        margin-right: 15px;
+        fill: @btn_gray;
+    }
+    &__image_active {
+        fill: @white;
+    }
+    &__action_active {
+        color: @white;
+    }
+    &__actions_playlist {
+        padding-bottom: 10px;
+        border-bottom: 1px solid @border_gray;
+    }
+    &__image_playlist {
+        fill: @black;
+        background: @gray;
+        padding: 6px;
+        width: 23px;
+        height: 23px;
+    }
+    &__image-love-playlist {
+        padding: 6px;
+        width: 23px;
+        height: 23px;
+        color: @btn_gray;
+        background: linear-gradient(135deg, #450af5, #c4efd9);
+    }
+}
