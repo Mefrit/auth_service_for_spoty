@@ -21,7 +21,6 @@ class Play {
         this.url_params = conf.url_params;
     }
     playMusic = (ev: any) => {
-        // ev.preventDefault();
         const song_data = JSON.parse(ev.target.getAttribute("data-info-music"));
         this.player.play(song_data);
     };
@@ -54,8 +53,10 @@ class Play {
         const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.client_id}&format=jsonpretty&user_id=${id_user}
                 &access_token=${access_token}`;
         const favorite = await this.api.getDataFromApi(url_playlist);
-
         if (favorite.result) {
+            if (favorite.data.length == 0) {
+                this.songs_dom.insertAdjacentHTML("beforeend", `<h4 style="padding:10px">Список пуст</h4>`);
+            }
             favorite.data.forEach((element: any) => {
                 url_playlist_elem = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.client_id}&format=jsonpretty&limit=40&id=${element.id}`;
                 playlist = new PlayList({
@@ -107,8 +108,6 @@ class Play {
     }
     async init() {
         // вход
-        console.log("init");
-
         this.setRegistrationLink();
         if (this.songs_dom) {
             if (this.url_params.mode === "lovesongs") {
@@ -116,8 +115,6 @@ class Play {
             } else {
                 if (this.url_params.mode === "artist") {
                     await this.prepareArtistSongs();
-
-                    //   const songs = await this.api.loadPlayList(this.url_params.play_list_id, this.settings.client_id);
                 } else {
                     await this.prepareSongs();
                 }

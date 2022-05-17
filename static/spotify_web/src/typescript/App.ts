@@ -3,15 +3,6 @@ import { PlayList } from "./modules/PlayList";
 import { AudioPlayer } from "./modules/AudioPlayer";
 import { Api } from "./modules/Api";
 import { settings } from "./settings";
-// const settings = {
-//     // _client_id: "cf25482b",
-//     _client_id: "cf25482b",
-//     _api_key: "4797f3a80bd19061a2d6e4ffc7f89856b040a81a",
-//     _secret: "6b8f1bb64f106a4f520b3bf98717e06e",
-//     _api_base: "https://api.jamendo.com/v3.0/",
-//     _code: "4fc6741c3be9f6fb9c13c9be0e8c2f9889e98396",
-// };
-// let access_token: any = null;
 
 let token_info: any = {};
 
@@ -84,7 +75,7 @@ class MainPage {
             // новинки
             url = `https://api.jamendo.com/v3.0/playlists/?client_id=${this.settings.client_id}&format=jsonpretty&limit=12&datebetween=2022-01-02_2022-04-01&hasimage=1`;
             const albums: any = await getDataFromApi(url);
-            // console.log("albums", albums);
+
             playlist = new PlayList({ list: albums.data, title: "Плейлисты", type: "playlist", url: url });
             this.albums_content.insertAdjacentHTML("beforeend", playlist.render());
 
@@ -100,31 +91,18 @@ class MainPage {
             });
             this.albums_content.insertAdjacentHTML("beforeend", playlist.render());
             // по жанрам
-            const url_jenre = `https://api.jamendo.com/v3.0/playlists/?client_id=${this.settings.client_id}&format=jsonpretty&limit=12`;
-            const albums_jenre: any = await getDataFromApi(url_jenre);
 
-            playlist = new PlayList({ list: albums_jenre.data, title: "Жанры", type: "playlist", url: url_jenre });
-            this.albums_content.insertAdjacentHTML("beforeend", playlist.render());
             // артисты
-
             const url_top = `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.client_id}&format=jsonpretty&limit=12&include=musicinfo&boost=listens_week&imagesize=100`;
             const track_top: any = await getDataFromApi(url_top);
 
             playlist = new PlayList({ list: track_top.data, title: "Новинки недели", type: "track", url: url_top });
             this.albums_content.insertAdjacentHTML("beforeend", playlist.render());
-            // топ треков
-            // url = `https://api.jamendo.com/v3.0/albums/?client_id=${this.settings.client_id}&format=jsonpretty&limit=12&order=popularity_total&datebetween=2021-01-02_2022-05-01&lang=en&hasscore=2&access_token=${token_info.access_token}`;
-            // const popularity_total: any = await getDataFromApi(url);
 
-            // if (popularity_total.result) {
-            //     playlist = new PlayList({
-            //         list: popularity_total.data,
-            //         title: "Популярное",
-            //         type: "album",
-            //         url: url,
-            //     });
-            //     this.albums_content.insertAdjacentHTML("beforeend", playlist.render());
-            // }
+            const url_jenre = `https://api.jamendo.com/v3.0/playlists/?client_id=${this.settings.client_id}&format=jsonpretty&limit=12`;
+            const albums_jenre: any = await getDataFromApi(url_jenre);
+            playlist = new PlayList({ list: albums_jenre.data, title: "Жанры", type: "playlist", url: url_jenre });
+            this.albums_content.insertAdjacentHTML("beforeend", playlist.render());
         }
 
         const plays_btn: any = document.getElementsByClassName("play-btn");

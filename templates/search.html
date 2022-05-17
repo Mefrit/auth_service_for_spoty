@@ -51,25 +51,10 @@
                                 d="M10.533 1.279c-5.18 0-9.407 4.14-9.407 9.279s4.226 9.279 9.407 9.279c2.234 0 4.29-.77 5.907-2.058l4.353 4.353a1 1 0 101.414-1.414l-4.344-4.344a9.157 9.157 0 002.077-5.816c0-5.14-4.226-9.28-9.407-9.28zm-7.407 9.279c0-4.006 3.302-7.28 7.407-7.28s7.407 3.274 7.407 7.28-3.302 7.279-7.407 7.279-7.407-3.273-7.407-7.28z"
                             ></path>
                         </svg>
-                        <a href="/search" class="menu__link">Поиск</a>
+                        <a href="#" class="menu__link">Поиск</a>
                     </li>
                 </ul>
-
                 <ul class="menu__actions">
-                    <!-- <li class="menu__action menu__action-playlist">
-                        <svg
-                            role="img"
-                            height="12"
-                            width="12"
-                            viewBox="0 0 16 16"
-                            class="menu__image menu__image_playlist"
-                        >
-                            <path
-                                d="M15.25 8a.75.75 0 01-.75.75H8.75v5.75a.75.75 0 01-1.5 0V8.75H1.5a.75.75 0 010-1.5h5.75V1.5a.75.75 0 011.5 0v5.75h5.75a.75.75 0 01.75.75z"
-                            ></path>
-                        </svg>
-                        <a href="#" class="menu__link">Создать плейлист</a>
-                    </li> -->
                     <li class="menu__action menu__action-playlist">
                         <svg
                             role="img"
@@ -86,8 +71,17 @@
                     </li>
                 </ul>
             </div>
-            <div class="content" id="albums-content">
-                <div id="songs"></div>
+            <div class="content">
+                <div class="search">
+                    <div class="search__text-interface">
+                        <label for="search-string">Название песни, автора или жанр </label>
+                        <input type="text" id="search-string" class="search__string" placeholder="Введите запрос" />
+                    </div>
+
+                    <input type="button" class="search__action" id="search-btn" value="Найти" />
+                </div>
+
+                <div id="albums-content" class="search_content"><p>Введите параметры поиска</p></div>
             </div>
         </div>
 
@@ -95,16 +89,6 @@
             <div id="song-info-player"></div>
             <div class="audio-player__interface">
                 <div class="action">
-                    <!-- <button class="action__order">
-                        <svg role="img" height="16" width="16" viewBox="0 0 16 16">
-                            <path
-                                d="M13.151.922a.75.75 0 10-1.06 1.06L13.109 3H11.16a3.75 3.75 0 00-2.873 1.34l-6.173 7.356A2.25 2.25 0 01.39 12.5H0V14h.391a3.75 3.75 0 002.873-1.34l6.173-7.356a2.25 2.25 0 011.724-.804h1.947l-1.017 1.018a.75.75 0 001.06 1.06L15.98 3.75 13.15.922zM.391 3.5H0V2h.391c1.109 0 2.16.49 2.873 1.34L4.89 5.277l-.979 1.167-1.796-2.14A2.25 2.25 0 00.39 3.5z"
-                            ></path>
-                            <path
-                                d="M7.5 10.723l.98-1.167.957 1.14a2.25 2.25 0 001.724.804h1.947l-1.017-1.018a.75.75 0 111.06-1.06l2.829 2.828-2.829 2.828a.75.75 0 11-1.06-1.06L13.109 13H11.16a3.75 3.75 0 01-2.873-1.34l-.787-.938z"
-                            ></path>
-                        </svg>
-                    </button> -->
                     <button class="action__back" id="play-back">
                         <svg role="img" height="16" width="16" viewBox="0 0 16 16">
                             <path
@@ -142,13 +126,6 @@
                             ></path>
                         </svg>
                     </button>
-                    <!-- <button class="action__turn">
-                        <svg role="img" height="16" class="action__imgturn" width="16" viewBox="0 0 16 16">
-                            <path
-                                d="M0 4.75A3.75 3.75 0 013.75 1h8.5A3.75 3.75 0 0116 4.75v5a3.75 3.75 0 01-3.75 3.75H9.81l1.018 1.018a.75.75 0 11-1.06 1.06L6.939 12.75l2.829-2.828a.75.75 0 111.06 1.06L9.811 12h2.439a2.25 2.25 0 002.25-2.25v-5a2.25 2.25 0 00-2.25-2.25h-8.5A2.25 2.25 0 001.5 4.75v5A2.25 2.25 0 003.75 12H5v1.5H3.75A3.75 3.75 0 010 9.75v-5z"
-                            ></path>
-                        </svg>
-                    </button> -->
                 </div>
                 <div class="action__progress">
                     <span class="action__time" id="play-time-start">00:00</span>
@@ -198,7 +175,7 @@
     ></script> -->
     <script
         src="{{ url_for('static', filename='./spotify_web/node_modules/requirejs/require.js') }}"
-        data-main="{{ url_for('static', filename='./spotify_web/public/script/js/Play.js') }}"
+        data-main="{{ url_for('static', filename='./spotify_web/public/script/js/Search.js') }}"
     ></script>
     <script
         src=" {{ url_for('static', filename='./spotify_web/src/requireJSconfig/requireConfig.js') }} "

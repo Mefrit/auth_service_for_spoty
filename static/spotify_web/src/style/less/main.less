@@ -60,3 +60,45 @@ body {
     background-color: @scrol_color;
     border-radius: 1px;
 }
+.search_content {
+    padding: 5px;
+}
+.search {
+    padding: 5px;
+    border-bottom: 1px solid white;
+    width: 100%;
+    display: flex;
+
+    flex-direction: row;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    &__string {
+        width: 400px;
+        padding: 6px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background: @back_main_content;
+        color: white;
+    }
+    &__text-interface {
+        display: flex;
+        flex-direction: column;
+        label {
+            font-size: 12px;
+        }
+    }
+    &__action {
+        margin-left: 25px;
+        padding: 8px 15px;
+        background-color: @border_gray;
+        color: @white;
+        cursor: pointer;
+        border: 1px solid @white;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+}

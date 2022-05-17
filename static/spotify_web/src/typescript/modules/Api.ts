@@ -10,7 +10,6 @@ export class Api {
     }
     loadPlayList(play_list_id: string, client_id: string) {
         return new Promise((resolve, reject) => {
-            // https://api.jamendo.com/v3.0/playlists/tracks/?client_id=your_client_id&format=jsonpretty&limit=2&name=Instrumental&track_type=albumtrack
             const url = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${client_id}&format=jsonpretty&limit=40&id=${play_list_id}`;
             this.getDataFromApi(url).then((answer: any) => {
                 resolve(answer);

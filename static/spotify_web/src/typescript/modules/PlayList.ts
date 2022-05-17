@@ -12,7 +12,6 @@ export class PlayList {
     }
     renderListItem(list: any[]): string[] {
         let play_list_item;
-
         if (list.length === 0) {
             return ["<h4>Список пуст</h4>"];
         }
