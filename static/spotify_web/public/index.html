@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link href="./style/css/main.css" rel="stylesheet" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>MSpoty</title>
+</head>
+
+<body>
+    <!-- <noscript>You need to enable JavaScript to run this app.</noscript> -->
+
+    <header class="header"></header>
+
+
+    <div id="root"></div>
+    <div class="main_content">
+        <div class="song_list">
+            <!-- ..лист элементов(список, но при нажатии на кнопку - отображается как плитка) -->
+            <!-- по всей обрласти экрана в такт музыке будет проигрываться визуализация музона -->
+            <!-- плавно сменяющаяся обложна песни и фото автора (если есть) -->
+            <div class="container">
+                <div class="menu">
+                    <h1>MENU</h1>
+                </div>
+                <div class="content">
+                    <div class="about">
+                        <span class="about__name">Коффе мой друг</span>
+                        <p class="about__description"></p>
+                        <!-- <img src="./images/exz/eea392ee15e05cf2df6e56b546585078.jpg" alt="author" class="about__image" /> -->
+                        <input type="button" class="about__listen" />
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- <ol class="song_list">
+                    <li class="song">
+                        <input value="+" type="button" class="song__add" />
+                        <img src="" alt="" class="song__icon" />
+                        <p class="song__author">Автор 1</p>
+                        <span class="song__title">Песня 111</span><span class="song__timecount"> 03.00.33</span>
+                    </li>
+                    <li class="song">
+                        <input type="button" value="+" class="song__add" />
+                        <img src="" alt="" class="song__icon" />
+                        <p class="song__author">Автор 2</p>
+                        <span class="song__title">Песня 2</span><span class="song__timecount">03.00.33</span>
+                    </li>
+                </ol>
+                <div class="albums">
+                    <div>
+                        <img src="" alt="" class="albums__image" /><span class="albums__title">Альбом 1</span>
+                        <p>Поп</p>
+                    </div>
+                </div>
+                <div class="albums">
+                    <div>
+                        <img src="" alt="" class="albums__image" /><span class="albums__title">Альбом 2</span>
+                        <p>Поп</p>
+                    </div>
+                </div>
+                <div class="albums">
+                    <div>
+                        <img src="" alt="" class="albums__image" /><span class="albums__title">Альбом 3</span>
+                        <p>Металл</p>
+                    </div>
+                </div>
+            </div>
+            <div class="audio_player">
+                <div class="song">
+                    <input value="+" type="button" class="song__add" />
+                    <img src="" alt="" class="song__icon" />
+                    <p class="song__author">Автор 1</p>
+                    <span class="song__title">Песня 1</span><span class="song__timecount"> 03.00.33</span>
+                </div>
+                <div class="song_progress">
+                    <span class="song_progress__time_start"></span>
+                    <div class="progress"></div>
+                    <span class="song_progress__time_end"></span>
+                </div>
+                <div class="action">
+                    <img src="" alt="" class="action__back" />
+                    <img src="" alt="" class="action_stop" />
+                    <img src="" alt="" class="action__forvard" />
+                </div>
+            </div> -->
+        </div>
+        <footer class="footer"></footer>
+</body>
+
+</html>
