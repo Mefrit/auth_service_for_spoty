@@ -6,8 +6,8 @@ import { Api } from "./modules/Api";
 import { settings } from "./settings";
 
 class Play {
-    user_info_dom: any;
-    songs_dom: any;
+    user_info_dom: HTMLElement | null;
+    songs_dom: HTMLElement | null;
     api: any;
     player: any;
     settings: any;

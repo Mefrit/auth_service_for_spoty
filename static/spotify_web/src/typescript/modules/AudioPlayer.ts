@@ -4,18 +4,18 @@ export class AudioPlayer {
     Api: any;
     song_info_player: any;
     settings: any;
-    play_back: any;
-    play_forward: any;
-    play_progress: any;
-    play_volume: any;
-    play_sound_mute: any;
-    play_pause: any;
+    play_back: HTMLElement;
+    play_forward: HTMLElement;
+    play_progress: HTMLElement | any;
+    play_volume: HTMLElement;
+    play_sound_mute: HTMLElement;
+    play_pause: HTMLElement;
     is_played: boolean;
     curent_song_index: number;
     curent_api_url: string;
-    play_time_start: any;
-    play_svg_path: any;
-    play_time_end: any;
+    play_time_start: HTMLElement;
+    play_svg_path: HTMLElement;
+    play_time_end: HTMLElement;
     curent_volume: number;
     constructor(conf: any) {
         this.is_played = false;

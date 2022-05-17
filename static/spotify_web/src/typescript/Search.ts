@@ -5,17 +5,17 @@ import { Api } from "./modules/Api";
 import { settings } from "./settings";
 
 class Search {
-    user_info_dom: any;
-    songs_dom: any;
+    user_info_dom: HTMLElement;
+    songs_dom: HTMLElement;
     api: any;
     player: any;
-    albums_content: any;
+    albums_content: HTMLElement;
     settings: any;
     url_params: any;
     search_string: string;
-    search_mode_select: any;
-    search_btn: any;
-    search_string_dom: any;
+    search_mode_select: HTMLElement | null;
+    search_btn: HTMLElement | null;
+    search_string_dom: HTMLElement | null;
     search_mode: string;
     constructor(conf: any) {
         this.user_info_dom = conf.user_info_dom;
