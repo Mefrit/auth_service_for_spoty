@@ -26,7 +26,7 @@ def start():
         x = requests.post(url, data = myobj)
         result={}
         result["status"] = "ok"
-        result["access_token"] = x.text
+        result["accessToken"] = x.text
         return jsonify(result)
 
     return render_template("index.html")

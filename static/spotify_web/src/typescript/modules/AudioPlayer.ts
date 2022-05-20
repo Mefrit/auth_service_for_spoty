@@ -1,41 +1,41 @@
 import { SongInfoPlayer } from "./SongInfoPlayer";
 export class AudioPlayer {
-    dom_audio_player: any;
+    dom_audioPlayer: any;
     Api: any;
-    song_info_player: any;
+    songInfoPlayer: any;
     settings: any;
-    play_back: HTMLElement;
-    play_forward: HTMLElement;
-    play_progress: HTMLElement | any;
-    play_volume: HTMLElement;
-    play_sound_mute: HTMLElement;
-    play_pause: HTMLElement;
+    playBack: HTMLElement;
+    playForward: HTMLElement;
+    playProgress: HTMLElement | any;
+    playVolume: HTMLElement;
+    playSoundMute: HTMLElement;
+    playPause: HTMLElement;
     is_played: boolean;
     curent_song_index: number;
     curent_api_url: string;
-    play_time_start: HTMLElement;
-    play_svg_path: HTMLElement;
-    play_time_end: HTMLElement;
+    play_timeStart: HTMLElement;
+    playSvgPath: HTMLElement;
+    play_timeEnd: HTMLElement;
     curent_volume: number;
     constructor(conf: any) {
         this.is_played = false;
-        this.dom_audio_player = conf.audio_player;
+        this.dom_audioPlayer = conf.audioPlayer;
         this.curent_volume = 50;
         this.curent_song_index = 0;
         this.curent_api_url = "";
 
         this.Api = conf.api;
         this.settings = conf.settings;
-        this.song_info_player = conf.song_info_player;
-        this.play_back = conf.play_back;
-        this.play_forward = conf.play_forward;
-        this.play_progress = conf.play_progress;
-        this.play_volume = conf.play_volume;
-        this.play_pause = conf.play_pause;
-        this.play_sound_mute = conf.play_sound_mute;
-        this.play_time_start = conf.time_start;
-        this.play_time_end = conf.time_end;
-        this.play_svg_path = conf.play_svg_path;
+        this.songInfoPlayer = conf.songInfoPlayer;
+        this.playBack = conf.playBack;
+        this.playForward = conf.playForward;
+        this.playProgress = conf.playProgress;
+        this.playVolume = conf.playVolume;
+        this.playPause = conf.playPause;
+        this.playSoundMute = conf.playSoundMute;
+        this.play_timeStart = conf.timeStart;
+        this.play_timeEnd = conf.timeEnd;
+        this.playSvgPath = conf.playSvgPath;
         this.initEvents();
     }
     getTimeFromSecunds(sec: number) {
@@ -44,41 +44,41 @@ export class AudioPlayer {
         return ("0" + full_minutes).slice(-2) + ":" + ("0" + secunds).slice(-2);
     }
     timeupdate = () => {
-        const current_time = this.dom_audio_player.currentTime;
-        const duration = this.dom_audio_player.duration;
+        const current_time = this.dom_audioPlayer.currentTime;
+        const duration = this.dom_audioPlayer.duration;
 
-        this.play_time_start.innerHTML = this.getTimeFromSecunds(current_time + 0.25);
+        this.play_timeStart.innerHTML = this.getTimeFromSecunds(current_time + 0.25);
 
-        this.play_time_end.innerHTML = this.getTimeFromSecunds(duration);
-        this.play_progress.value = Math.round(((current_time + 0.25) / duration) * 100);
+        this.play_timeEnd.innerHTML = this.getTimeFromSecunds(duration);
+        this.playProgress.value = Math.round(((current_time + 0.25) / duration) * 100);
     };
     changePlayProgress = (ev: any) => {
         const new_part = ev.target.value;
-        const duration = this.dom_audio_player.duration;
-        this.dom_audio_player.currentTime = Math.round((duration / 100) * new_part);
+        const duration = this.dom_audioPlayer.duration;
+        this.dom_audioPlayer.currentTime = Math.round((duration / 100) * new_part);
     };
     muteSound = () => {
-        if (this.dom_audio_player.volume === 0) {
-            this.dom_audio_player.volume = this.curent_volume / 100;
+        if (this.dom_audioPlayer.volume === 0) {
+            this.dom_audioPlayer.volume = this.curent_volume / 100;
         } else {
-            this.dom_audio_player.volume = 0;
+            this.dom_audioPlayer.volume = 0;
         }
     };
     playPauseSong = () => {
         if (this.is_played) {
-            this.play_svg_path.setAttribute(
+            this.playSvgPath.setAttribute(
                 "d",
                 "M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"
             );
-            this.dom_audio_player.pause();
+            this.dom_audioPlayer.pause();
         } else {
-            this.play_svg_path.setAttribute("d", "M0,0 0,16 5,16 5,0z M 15,0 15,16 10,16 10,0z");
-            this.dom_audio_player.play();
+            this.playSvgPath.setAttribute("d", "M0,0 0,16 5,16 5,0z M 15,0 15,16 10,16 10,0z");
+            this.dom_audioPlayer.play();
         }
         this.is_played = !this.is_played;
     };
     playForward = () => {
-        this.dom_audio_player.pause();
+        this.dom_audioPlayer.pause();
 
         if (this.curent_api_url)
             this.Api.getDataFromApi(this.curent_api_url).then((answer: any) => {
@@ -102,7 +102,7 @@ export class AudioPlayer {
         this.is_played = !this.is_played;
     };
     playBack = () => {
-        this.dom_audio_player.pause();
+        this.dom_audioPlayer.pause();
 
         if (this.curent_api_url)
             this.Api.getDataFromApi(this.curent_api_url).then((answer: any) => {
@@ -121,25 +121,25 @@ export class AudioPlayer {
         this.is_played = !this.is_played;
     };
     initEvents() {
-        this.dom_audio_player.addEventListener("timeupdate", this.timeupdate);
-        this.play_progress.addEventListener("change", this.changePlayProgress);
-        this.play_sound_mute.addEventListener("click", this.muteSound);
-        this.play_volume.addEventListener("change", (ev: any) => {
+        this.dom_audioPlayer.addEventListener("timeupdate", this.timeupdate);
+        this.playProgress.addEventListener("change", this.changePlayProgress);
+        this.playSoundMute.addEventListener("click", this.muteSound);
+        this.playVolume.addEventListener("change", (ev: any) => {
             this.curent_volume = ev.target.value;
-            this.dom_audio_player.volume = ev.target.value / 100;
+            this.dom_audioPlayer.volume = ev.target.value / 100;
         });
-        this.play_pause.addEventListener("click", this.playPauseSong);
-        this.play_forward.addEventListener("click", this.playForward);
-        this.play_back.addEventListener("click", this.playBack);
+        this.playPause.addEventListener("click", this.playPauseSong);
+        this.playForward.addEventListener("click", this.playForward);
+        this.playBack.addEventListener("click", this.playBack);
     }
 
     playSong(data: any) {
-        this.song_info_player.innerHTML = "";
-        this.dom_audio_player.setAttribute("src", data.audio);
-        this.dom_audio_player.play();
+        this.songInfoPlayer.innerHTML = "";
+        this.dom_audioPlayer.setAttribute("src", data.audio);
+        this.dom_audioPlayer.play();
         this.is_played = true;
         const song_info = new SongInfoPlayer(data);
-        this.song_info_player.insertAdjacentHTML("beforeend", song_info.render());
+        this.songInfoPlayer.insertAdjacentHTML("beforeend", song_info.render());
     }
     loadArtistSong(artist_id: any) {
         const params = new URLSearchParams({
@@ -148,9 +148,9 @@ export class AudioPlayer {
         });
         document.location.href = "play?" + params.toString();
     }
-    loadPlayList(play_list_id: string) {
+    loadPlayList(playListId: string) {
         const params = new URLSearchParams({
-            play_list_id: play_list_id,
+            playListId: playListId,
             mode: "playlist",
         });
         document.location.href = "play?" + params.toString();
@@ -167,22 +167,22 @@ export class AudioPlayer {
         if (data) {
             this.curent_api_url = data.url;
             this.curent_song_index = data.index;
-            if (data.is_playlist) {
+            if (data.isPlaylist) {
                 await this.loadPlayList(data.id);
             }
-            if (data.is_artist) {
+            if (data.isArtist) {
                 await this.loadArtistSong(data.id);
             }
-            if (data.is_album) {
+            if (data.isAlbum) {
                 await this.loadAlbumSong(data.id);
             }
-            answer = await this.Api.loadSong(data.id, this.settings.client_id);
+            answer = await this.Api.loadSong(data.id, this.settings.clientId);
 
             if (answer.result && answer.data.length > 0) {
-                this.play_svg_path.setAttribute("d", "M0,0 0,16 5,16 5,0z M 15,0 15,16 10,16 10,0z");
+                this.playSvgPath.setAttribute("d", "M0,0 0,16 5,16 5,0z M 15,0 15,16 10,16 10,0z");
                 this.playSong(answer.data[0]);
             } else {
-                this.dom_audio_player.pause();
+                this.dom_audioPlayer.pause();
             }
         }
     }

@@ -14,8 +14,8 @@ export class PlayListItem {
         if (item.image) {
             href = item.image;
         }
-        if (item.album_image) {
-            href = item.album_image;
+        if (item.albumImage) {
+            href = item.albumImage;
         }
         return href;
     }
@@ -25,8 +25,8 @@ export class PlayListItem {
         if (item.name) {
             title = item.name;
         }
-        if (item.album_name && this.type !== "track") {
-            title = item.album_name;
+        if (item.albumName && this.type !== "track") {
+            title = item.albumName;
         }
         return title;
     }
@@ -43,8 +43,8 @@ export class PlayListItem {
                 description += "\nДата релиза " + item.creationdate + ".";
             }
         }
-        if (item.artist_name) {
-            description += "\nАвтор " + item.artist_name + ".";
+        if (item.artistName) {
+            description += "\nАвтор " + item.artistName + ".";
         }
         return description;
     }
@@ -53,25 +53,25 @@ export class PlayListItem {
         if (item.id) {
             inf.id = item.id;
         }
-        if (item.playlistadddate || item.album_name) {
+        if (item.playlistadddate || item.albumName) {
             if (url) {
                 inf.index = index;
                 inf.url = url;
             }
         }
         if (this.type === "album") {
-            inf.is_album = true;
+            inf.isAlbum = true;
         } else {
-            inf.is_album = false;
+            inf.isAlbum = false;
         }
         if (this.type === "artist") {
-            inf.is_artist = true;
+            inf.isArtist = true;
         } else {
-            inf.is_artist = false;
+            inf.isArtist = false;
         }
 
         if (this.type === "playlist") {
-            inf.is_playlist = true;
+            inf.isPlaylist = true;
         }
         return JSON.stringify(inf);
     }

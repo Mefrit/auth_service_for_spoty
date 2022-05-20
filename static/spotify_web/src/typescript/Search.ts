@@ -9,9 +9,9 @@ class Search {
     songs_dom: HTMLElement;
     api: any;
     player: any;
-    albums_content: HTMLElement;
+    albumsContent: HTMLElement;
     settings: any;
-    url_params: any;
+    urlParams: any;
     search_string: string;
     search_mode_select: HTMLElement | null;
     search_btn: HTMLElement | null;
@@ -28,49 +28,49 @@ class Search {
         this.api = conf.api;
         this.player = conf.player;
         this.settings = conf.settings;
-        this.url_params = conf.url_params;
-        this.albums_content = conf.albums_content;
+        this.urlParams = conf.urlParams;
+        this.albumsContent = conf.albumsContent;
         this.search_mode = "name_song";
         this.search_string = "";
     }
     playMusic = (ev: any) => {
-        const song_data = JSON.parse(ev.target.getAttribute("data-info-music"));
-        this.player.play(song_data);
+        const songData = JSON.parse(ev.target.getAttribute("data-info-music"));
+        this.player.play(songData);
     };
     createBackLink() {
         return "<a href='/'>Назад</a>";
     }
     initPlaySongEvents() {
         // вынести
-        const plays_btn: any = document.getElementsByClassName("play-btn");
-        if (plays_btn) {
-            for (var i = 0; i < plays_btn.length; i++) {
-                plays_btn[i].addEventListener("click", this.playMusic);
+        const playsBtn: any = document.getElementsByClassName("play-btn");
+        if (playsBtn) {
+            for (var i = 0; i < playsBtn.length; i++) {
+                playsBtn[i].addEventListener("click", this.playMusic);
             }
         }
     }
     startSearch = () => {
         const url_search =
-            `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.client_id}&format=jsonpretty&limit=40&search=` +
+            `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&search=` +
             this.search_string_dom.value.trim();
-        this.albums_content.innerHTML = "<p>Поиск...</p>";
+        this.albumsContent.innerHTML = "<p>Поиск...</p>";
         this.api.getDataFromApi(url_search).then((data: any) => {
-            this.albums_content.innerHTML = "";
+            this.albumsContent.innerHTML = "";
             const playlist = new PlayList({
                 list: data.data,
                 title: "Найденные композиции",
                 type: "track",
                 url: url_search,
             });
-            this.albums_content.insertAdjacentHTML("beforeend", playlist.render());
-            const plays_btn: any = document.getElementsByClassName("play-btn");
-            this.initListenMusicEvent(plays_btn);
+            this.albumsContent.insertAdjacentHTML("beforeend", playlist.render());
+            const playsBtn: any = document.getElementsByClassName("play-btn");
+            this.initListenMusicEvent(playsBtn);
         });
     };
-    initListenMusicEvent(plays_btn: any) {
-        if (plays_btn) {
-            for (var i = 0; i < plays_btn.length; i++) {
-                plays_btn[i].addEventListener("click", this.playMusic);
+    initListenMusicEvent(playsBtn: any) {
+        if (playsBtn) {
+            for (var i = 0; i < playsBtn.length; i++) {
+                playsBtn[i].addEventListener("click", this.playMusic);
             }
         }
     }
@@ -88,40 +88,40 @@ class Search {
 
 const user_info_dom = document.getElementById("user-info");
 const songs = document.getElementById("songs");
-const audio_player = document.getElementById("audio-player");
-const song_info_player = document.getElementById("song-info-player");
+const audioPlayer = document.getElementById("audio-player");
+const songInfoPlayer = document.getElementById("song-info-player");
 
 const search_string = document.getElementById("search-string");
 const search_mode_select = document.getElementById("search-mode");
 const search_btn = document.getElementById("search-btn");
-const albums_content = document.getElementById("albums-content");
+const albumsContent = document.getElementById("albums-content");
 
-const play_pause = document.getElementById("play-pause");
-const play_back = document.getElementById("play-back");
-const play_forward = document.getElementById("play-forward");
-const play_progress = document.getElementById("play-progress");
-const play_sound_mute = document.getElementById("play-sound-mute");
-const play_volume = document.getElementById("play-volume");
-const play_time_start = document.getElementById("play-time-start");
-const play_time_end = document.getElementById("play-time-end");
-const play_svg_path = document.getElementById("play_svg_path");
-const url_params = getParams(window.location);
+const playPause = document.getElementById("play-pause");
+const playBack = document.getElementById("play-back");
+const playForward = document.getElementById("play-forward");
+const playProgress = document.getElementById("play-progress");
+const playSoundMute = document.getElementById("play-sound-mute");
+const playVolume = document.getElementById("play-volume");
+const play_timeStart = document.getElementById("play-time-start");
+const play_timeEnd = document.getElementById("play-time-end");
+const playSvgPath = document.getElementById("playSvgPath");
+const urlParams = getParams(window.location);
 
 const Api_object = new Api();
 const player = new AudioPlayer({
-    audio_player: audio_player,
+    audioPlayer: audioPlayer,
     api: Api_object,
     settings: settings,
-    song_info_player: song_info_player,
-    play_pause: play_pause,
-    play_back: play_back,
-    play_forward: play_forward,
-    play_progress: play_progress,
-    play_volume: play_volume,
-    play_sound_mute: play_sound_mute,
-    time_start: play_time_start,
-    time_end: play_time_end,
-    play_svg_path: play_svg_path,
+    songInfoPlayer: songInfoPlayer,
+    playPause: playPause,
+    playBack: playBack,
+    playForward: playForward,
+    playProgress: playProgress,
+    playVolume: playVolume,
+    playSoundMute: playSoundMute,
+    timeStart: play_timeStart,
+    timeEnd: play_timeEnd,
+    playSvgPath: playSvgPath,
 });
 const main = new Search({
     user_info_dom: user_info_dom,
@@ -129,11 +129,11 @@ const main = new Search({
     api: Api_object,
     player: player,
     settings: settings,
-    song_info_player: song_info_player,
-    url_params: url_params,
+    songInfoPlayer: songInfoPlayer,
+    urlParams: urlParams,
     search_string: search_string,
     search_mode_select: search_mode_select,
     search_btn: search_btn,
-    albums_content: albums_content,
+    albumsContent: albumsContent,
 });
 main.init();

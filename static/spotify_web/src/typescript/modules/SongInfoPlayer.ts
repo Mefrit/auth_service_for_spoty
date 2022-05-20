@@ -13,8 +13,6 @@ export class SongInfoPlayer {
                         <p class="song__author">${this.item.artist_name}</p>
                     </div>
                 </div>
-              
-            
             </div>
         `;
     }

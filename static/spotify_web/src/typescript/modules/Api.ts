@@ -1,16 +1,16 @@
 import { getJSON } from "../lib/query";
 export class Api {
-    loadSong(song_id: string, client_id: string) {
+    loadSong(songId: string, clientId: string) {
         return new Promise((resolve, reject) => {
-            const url = `https://api.jamendo.com/v3.0/tracks/?client_id=${client_id}&format=jsonpretty&limit=5&include=musicinfo&id=${song_id}`;
+            const url = `https://api.jamendo.com/v3.0/tracks/?client_id=${clientId}&format=jsonpretty&limit=5&include=musicinfo&id=${songId}`;
             this.getDataFromApi(url).then((answer: any) => {
                 resolve(answer);
             });
         });
     }
-    loadPlayList(play_list_id: string, client_id: string) {
+    loadPlayList(playListId: string, clientId: string) {
         return new Promise((resolve, reject) => {
-            const url = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${client_id}&format=jsonpretty&limit=40&id=${play_list_id}`;
+            const url = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${clientId}&format=jsonpretty&limit=40&id=${playListId}`;
             this.getDataFromApi(url).then((answer: any) => {
                 resolve(answer);
             });
