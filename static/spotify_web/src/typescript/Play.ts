@@ -58,12 +58,12 @@ class Play {
     }
     async prepareArtistSongs() {
         let url_playlist_elem, playlist;
-        const urlArtistSongs = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&order=track_name_desc&id=${this.urlParams.artist_id}`;
+        const urlArtistSongs = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&order=track_name_desc&id=${this.urlParams.artist_id}`;
         const artistsSongs = await this.api.getDataFromApi(urlArtistSongs);
         if (artistsSongs.result && artistsSongs.data.length > 0) {
             artistsSongs.data.forEach(
                 (element: { tracks: PlayListItemInterface[]; name: string; id: string | number }) => {
-                    url_playlist_elem = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${element.id}&order=track_id`;
+                    url_playlist_elem = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=40&id=${element.id}&order=track_id`;
                     playlist = new PlayList({
                         list: element.tracks,
                         title: element.name,
@@ -81,7 +81,7 @@ class Play {
         let url_playlist_elem, playlist;
         const accessToken = localStorage.getItem("accessToken");
         const id_user = localStorage.getItem("id_user");
-        const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&user_id=${id_user}
+        const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&user_id=${id_user}
                 &access_token=${accessToken}`;
         const favorite = await this.api.getDataFromApi(url_playlist);
         if (favorite.result) {
@@ -89,7 +89,7 @@ class Play {
                 this.songsDom.insertAdjacentHTML("beforeend", `<h4 style="padding:10px">Список пуст</h4>`);
             }
             favorite.data.forEach((element: { tracks: PlayListItemInterface[]; name: string; id: string | number }) => {
-                url_playlist_elem = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${element.id}`;
+                url_playlist_elem = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=40&id=${element.id}`;
                 playlist = new PlayList({
                     list: element.tracks,
                     title: element.name,
@@ -107,8 +107,8 @@ class Play {
     }
     async prepareSongs() {
         if (this.urlParams.playListId) {
-            const songs = await this.api.loadPlayList(this.urlParams.playListId, this.settings.clientId);
-            const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${this.urlParams.playListId}`;
+            const songs = await this.api.loadPlayList(this.urlParams.playListId, this.settings.CLIENT_ID);
+            const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=40&id=${this.urlParams.playListId}`;
             if (songs.result && songs.data.length > 0) {
                 let playlist = new PlayList({
                     list: songs.data[0].tracks,
@@ -126,7 +126,7 @@ class Play {
         const link = document.getElementById("registrationLink");
         link?.setAttribute(
             "href",
-            `https://api.jamendo.com/v3.0/oauth/authorize?client_id=${this.settings.clientId}&redirect_uri=http://localhost:4567/&response_type=code`
+            `https://api.jamendo.com/v3.0/oauth/authorize?client_id=${this.settings.CLIENT_ID}&redirect_uri=http://localhost:4567/&response_type=code`
         );
     }
     initPlaySongEvents() {
@@ -141,19 +141,20 @@ class Play {
         // вход
         this.setRegistrationLink();
         if (this.songsDom) {
-            if (this.urlParams.mode === "lovesongs") {
-                await this.prepareLoverSongs();
-            } else {
-                if (this.urlParams.mode === "artist") {
+            switch (this.urlParams.mode) {
+                case "lovesongs":
+                    await this.prepareLoverSongs();
+                    break;
+                case "artist":
                     await this.prepareArtistSongs();
-                } else {
+                    break;
+                default:
                     await this.prepareSongs();
-                }
             }
         }
         this.initPlaySongEvents();
     }
-    async start() {
+    start() {
         this.init();
     }
 }

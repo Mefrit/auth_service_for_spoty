@@ -180,7 +180,7 @@ export class AudioPlayer {
             if (data.isAlbum) {
                 await this.loadAlbumSong(data.id);
             }
-            answer = await this.Api.loadSong(data.id, this.settings.clientId);
+            answer = await this.Api.loadSong(data.id, this.settings.CLIENT_ID);
 
             if (answer.result && answer.data.length > 0) {
                 this.playSvgPath.setAttribute("d", "M0,0 0,16 5,16 5,0z M 15,0 15,16 10,16 10,0z");

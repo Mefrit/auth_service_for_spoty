@@ -76,7 +76,7 @@ class Search {
     startSearch = () => {
         const value = (this.search_string_dom as HTMLInputElement).value;
         const url_search =
-            `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&search=` +
+            `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=40&search=` +
             value.trim();
         this.albumsContent.innerHTML = "<p>Поиск...</p>";
         this.Api.getDataFromApi(url_search).then((data: DefaultRequest) => {
@@ -106,7 +106,7 @@ class Search {
         // вход
         this.initSearchEvents();
     }
-    async start() {
+    start() {
         this.init();
     }
 }

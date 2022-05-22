@@ -28,7 +28,7 @@ import {
     PlayerInterfaceInput,
     DefaultRequest,
 } from "./interfaces/defaultInterface";
-import { MainPageInterface } from "./interfaces/MainpageInterface";
+import { MainPageInterface } from "./interfaces/MainPageInterface";
 let tokenInfo: { accessToken: string } = { accessToken: "" };
 
 function getTemplateForUserInfo(userInfo: { image: string; dispname: string }) {
@@ -75,14 +75,14 @@ class MainPage {
 
         this.registrationLink.setAttribute(
             "href",
-            `https://api.jamendo.com/v3.0/oauth/authorize?client_id=${this.settings.clientId}&redirect_uri=http://localhost:4567/&response_type=code`
+            `https://api.jamendo.com/v3.0/oauth/authorize?client_id=${this.settings.CLIENT_ID}&redirect_uri=http://localhost:4567/&response_type=code`
         );
         if (this.albumsContent) {
             // fuzzytags - выбор по тегам
             let url, playlist;
 
             // новинки
-            url = `https://api.jamendo.com/v3.0/playlists/?client_id=${this.settings.clientId}&format=jsonpretty&limit=12&datebetween=2022-01-02_2022-04-01&hasimage=1`;
+            url = `https://api.jamendo.com/v3.0/playlists/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=12&datebetween=2022-01-02_2022-04-01&hasimage=1`;
             const albums: DefaultRequest = await getDataFromApi(url);
             if (albums.result) {
                 playlist = new PlayList({ list: albums.data, title: "Плейлисты", type: "playlist", url: url });
@@ -90,7 +90,7 @@ class MainPage {
             }
 
             /// afhnbcns
-            const urlArtist = `https://api.jamendo.com/v3.0/artists/?client_id=${this.settings.clientId}&format=jsonpretty&limit=12&imagesize=100`;
+            const urlArtist = `https://api.jamendo.com/v3.0/artists/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=12&imagesize=100`;
             const albumsArtist: DefaultRequest = await getDataFromApi(urlArtist);
 
             playlist = new PlayList({
@@ -102,13 +102,13 @@ class MainPage {
             this.albumsContent.insertAdjacentHTML("beforeend", playlist.render());
             // по жанрам
             // артисты
-            const urlTop = `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=12&include=musicinfo&boost=listens_week&imagesize=100`;
+            const urlTop = `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=12&include=musicinfo&boost=listens_week&imagesize=100`;
             const trackTop: DefaultRequest = await getDataFromApi(urlTop);
 
             playlist = new PlayList({ list: trackTop.data, title: "Новинки недели", type: "track", url: urlTop });
             this.albumsContent.insertAdjacentHTML("beforeend", playlist.render());
 
-            const urlJenre = `https://api.jamendo.com/v3.0/playlists/?client_id=${this.settings.clientId}&format=jsonpretty&limit=12`;
+            const urlJenre = `https://api.jamendo.com/v3.0/playlists/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=12`;
             const albumsJenre: DefaultRequest = await getDataFromApi(urlJenre);
             playlist = new PlayList({ list: albumsJenre.data, title: "Жанры", type: "playlist", url: urlJenre });
             this.albumsContent.insertAdjacentHTML("beforeend", playlist.render());
