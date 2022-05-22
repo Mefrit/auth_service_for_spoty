@@ -1,15 +1,16 @@
+import { PlayListItemInterface } from "../interfaces/PlayListInterface";
 export class PlayListItem {
-    item: any;
+    item: PlayListItemInterface;
     url: string;
     type: string;
     index: string | number;
-    constructor(item: any, type: string, url: string = "", index: any) {
+    constructor(item: PlayListItemInterface, type: string, url: string = "", index: number) {
         this.item = item;
         this.type = type;
         this.url = url;
         this.index = index;
     }
-    getImageHref(item: any) {
+    getImageHref(item: PlayListItemInterface) {
         let href = "./static/spotify_web/public/images/album.jpg";
         if (item.image) {
             href = item.image;
@@ -19,7 +20,7 @@ export class PlayListItem {
         }
         return href;
     }
-    getTitleItem(item: any) {
+    getTitleItem(item: PlayListItemInterface) {
         let title = "Не известно";
 
         if (item.name) {
@@ -30,7 +31,7 @@ export class PlayListItem {
         }
         return title;
     }
-    getDescription(item: any) {
+    getDescription(item: PlayListItemInterface) {
         let description = "";
         if (item.musicinfo) {
             description += "Жанры: " + item.musicinfo.tags.genres.join(" ") + ".";
@@ -48,31 +49,22 @@ export class PlayListItem {
         }
         return description;
     }
-    getInfPlayer(item: any, url: string, index: string | number) {
-        let inf: any = {};
+    getInfPlayer(item: PlayListItemInterface, url: string, index: string | number) {
+        let inf;
         if (item.id) {
-            inf.id = item.id;
+            inf = { id: item.id };
         }
-        if (item.playlistadddate || item.albumName) {
-            if (url) {
-                inf.index = index;
-                inf.url = url;
-            }
+        if (url) {
+            inf = { ...inf, index: index, url: url };
         }
-        if (this.type === "album") {
-            inf.isAlbum = true;
-        } else {
-            inf.isAlbum = false;
-        }
-        if (this.type === "artist") {
-            inf.isArtist = true;
-        } else {
-            inf.isArtist = false;
+        inf = { ...inf, index: index, url: url, isAlbum: this.type === "album", isArtist: this.type === "artist" };
+        if (this.type === "playlist") {
+            inf = {
+                ...inf,
+                isPlaylist: true,
+            };
         }
 
-        if (this.type === "playlist") {
-            inf.isPlaylist = true;
-        }
         return JSON.stringify(inf);
     }
     render() {

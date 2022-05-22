@@ -4,46 +4,77 @@ import { AudioPlayer } from "./modules/AudioPlayer";
 
 import { Api } from "./modules/Api";
 import { settings } from "./settings";
+import {
+    userInfoDom,
+    songs,
+    audioPlayer,
+    songInfoPlayer,
+    playPause,
+    playBack,
+    playForward,
+    playProgress,
+    playSoundMute,
+    playVolume,
+    playTimeStart,
+    playSvgPath,
+    playTimeEnd,
+} from "./lib/domInit";
 
+import { ApiInterface } from "./interfaces/ApiInterface";
+import { PlayListItemInterface } from "./interfaces/PlayListInterface";
+import { SettingsInterface, PlayerInterfaceInput } from "./interfaces/defaultInterface";
+import { PlayInterface } from "./interfaces/PlayInterface";
 class Play {
-    user_info_dom: HTMLElement | null;
-    songs_dom: HTMLElement | null;
-    api: any;
-    player: any;
-    settings: any;
-    urlParams: any;
-    constructor(conf: any) {
-        this.user_info_dom = conf.user_info_dom;
-        this.songs_dom = conf.songs;
+    userInfoDom: HTMLElement;
+    songsDom: HTMLElement;
+    api: ApiInterface;
+    player: PlayerInterfaceInput;
+    settings: SettingsInterface;
+    urlParams: {
+        [key: string]: string;
+    };
+    constructor(conf: PlayInterface) {
+        this.userInfoDom = conf.userInfoDom;
+        this.songsDom = conf.songs;
         this.api = conf.api;
         this.player = conf.player;
         this.settings = conf.settings;
         this.urlParams = conf.urlParams;
     }
-    playMusic = (ev: any) => {
-        const songData = JSON.parse(ev.target.getAttribute("data-info-music"));
-        this.player.play(songData);
+    playMusic = (ev: Event) => {
+        if (ev.target) {
+            const el = ev.target as HTMLInputElement;
+            const songSetting = el.getAttribute("data-info-music");
+
+            if (songSetting) {
+                const songData = JSON.parse(songSetting);
+
+                this.player.play(songData);
+            }
+        }
     };
     createBackLink() {
         return "<a href='/'>Назад</a>";
     }
     async prepareArtistSongs() {
         let url_playlist_elem, playlist;
-        const urlArtist_songs = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&order=track_name_desc&id=${this.urlParams.artist_id}`;
-        const artists_songs = await this.api.getDataFromApi(urlArtist_songs);
-        if (artists_songs.result && artists_songs.data.length > 0) {
-            artists_songs.data.forEach((element: any) => {
-                url_playlist_elem = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${element.id}&order=track_id`;
-                playlist = new PlayList({
-                    list: element.tracks,
-                    title: element.name,
-                    type: "track",
-                    url: url_playlist_elem,
-                });
-                this.songs_dom.insertAdjacentHTML("beforeend", playlist.render());
-            });
+        const urlArtistSongs = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&order=track_name_desc&id=${this.urlParams.artist_id}`;
+        const artistsSongs = await this.api.getDataFromApi(urlArtistSongs);
+        if (artistsSongs.result && artistsSongs.data.length > 0) {
+            artistsSongs.data.forEach(
+                (element: { tracks: PlayListItemInterface[]; name: string; id: string | number }) => {
+                    url_playlist_elem = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${element.id}&order=track_id`;
+                    playlist = new PlayList({
+                        list: element.tracks,
+                        title: element.name,
+                        type: "track",
+                        url: url_playlist_elem,
+                    });
+                    this.songsDom.insertAdjacentHTML("beforeend", playlist.render());
+                }
+            );
         } else {
-            this.songs_dom.insertAdjacentHTML("beforeend", `<h4>Список доступной музыки пуст</h4>`);
+            this.songsDom.insertAdjacentHTML("beforeend", `<h4>Список доступной музыки пуст</h4>`);
         }
     }
     async prepareLoverSongs() {
@@ -51,13 +82,13 @@ class Play {
         const accessToken = localStorage.getItem("accessToken");
         const id_user = localStorage.getItem("id_user");
         const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&user_id=${id_user}
-                &accessToken=${accessToken}`;
+                &access_token=${accessToken}`;
         const favorite = await this.api.getDataFromApi(url_playlist);
         if (favorite.result) {
-            if (favorite.data.length == 0) {
-                this.songs_dom.insertAdjacentHTML("beforeend", `<h4 style="padding:10px">Список пуст</h4>`);
+            if (favorite.data.length === 0) {
+                this.songsDom.insertAdjacentHTML("beforeend", `<h4 style="padding:10px">Список пуст</h4>`);
             }
-            favorite.data.forEach((element: any) => {
+            favorite.data.forEach((element: { tracks: PlayListItemInterface[]; name: string; id: string | number }) => {
                 url_playlist_elem = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${element.id}`;
                 playlist = new PlayList({
                     list: element.tracks,
@@ -65,29 +96,30 @@ class Play {
                     type: "track",
                     url: url_playlist_elem,
                 });
-                this.songs_dom.insertAdjacentHTML("beforeend", playlist.render());
+                this.songsDom.insertAdjacentHTML("beforeend", playlist.render());
             });
         } else {
-            alert(favorite.message.headers.error_message);
-            this.songs_dom.insertAdjacentHTML(
+            this.songsDom.insertAdjacentHTML(
                 "beforeend",
                 `<h4>Авторизуйтесь, для получения списка ваших плейлистов.</h4>`
             );
         }
     }
     async prepareSongs() {
-        const songs = await this.api.loadPlayList(this.urlParams.playListId, this.settings.clientId);
-        const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${this.urlParams.playListId}`;
-        if (songs.result && songs.data.length > 0) {
-            let playlist = new PlayList({
-                list: songs.data[0].tracks,
-                title: songs.data[0].name,
-                type: "track",
-                url: url_playlist,
-            });
-            this.songs_dom.insertAdjacentHTML("beforeend", playlist.render());
-        } else {
-            this.songs_dom.insertAdjacentHTML("beforeend", `<h4>Список доступной музыки пуст</h4>`);
+        if (this.urlParams.playListId) {
+            const songs = await this.api.loadPlayList(this.urlParams.playListId, this.settings.clientId);
+            const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.clientId}&format=jsonpretty&limit=40&id=${this.urlParams.playListId}`;
+            if (songs.result && songs.data.length > 0) {
+                let playlist = new PlayList({
+                    list: songs.data[0].tracks,
+                    title: songs.data[0].name,
+                    type: "track",
+                    url: url_playlist,
+                });
+                this.songsDom.insertAdjacentHTML("beforeend", playlist.render());
+            } else {
+                this.songsDom.insertAdjacentHTML("beforeend", `<h4>Список доступной музыки пуст</h4>`);
+            }
         }
     }
     setRegistrationLink() {
@@ -98,8 +130,7 @@ class Play {
         );
     }
     initPlaySongEvents() {
-        // вынести
-        const playsBtn: any = document.getElementsByClassName("play-btn");
+        const playsBtn: HTMLCollection = document.getElementsByClassName("play-btn");
         if (playsBtn) {
             for (var i = 0; i < playsBtn.length; i++) {
                 playsBtn[i].addEventListener("click", this.playMusic);
@@ -109,7 +140,7 @@ class Play {
     async init() {
         // вход
         this.setRegistrationLink();
-        if (this.songs_dom) {
+        if (this.songsDom) {
             if (this.urlParams.mode === "lovesongs") {
                 await this.prepareLoverSongs();
             } else {
@@ -127,26 +158,14 @@ class Play {
     }
 }
 
-const user_info_dom = document.getElementById("user-info");
-const songs = document.getElementById("songs");
-const audioPlayer = document.getElementById("audio-player");
-const songInfoPlayer = document.getElementById("song-info-player");
+const urlParams: {
+    [key: string]: string;
+} = getParams(window.location);
 
-const playPause = document.getElementById("play-pause");
-const playBack = document.getElementById("play-back");
-const playForward = document.getElementById("play-forward");
-const playProgress = document.getElementById("play-progress");
-const playSoundMute = document.getElementById("play-sound-mute");
-const playVolume = document.getElementById("play-volume");
-const play_timeStart = document.getElementById("play-time-start");
-const play_timeEnd = document.getElementById("play-time-end");
-const playSvgPath = document.getElementById("playSvgPath");
-const urlParams = getParams(window.location);
-
-const Api_object = new Api();
+const ApiObject = new Api();
 const player = new AudioPlayer({
     audioPlayer: audioPlayer,
-    api: Api_object,
+    api: ApiObject,
     settings: settings,
     songInfoPlayer: songInfoPlayer,
     playPause: playPause,
@@ -155,17 +174,16 @@ const player = new AudioPlayer({
     playProgress: playProgress,
     playVolume: playVolume,
     playSoundMute: playSoundMute,
-    timeStart: play_timeStart,
-    timeEnd: play_timeEnd,
+    timeStart: playTimeStart,
+    timeEnd: playTimeEnd,
     playSvgPath: playSvgPath,
 });
 const main = new Play({
-    user_info_dom: user_info_dom,
+    userInfoDom: userInfoDom,
     songs: songs,
-    api: Api_object,
+    api: ApiObject,
     player: player,
     settings: settings,
-    songInfoPlayer: songInfoPlayer,
     urlParams: urlParams,
 });
 main.start();

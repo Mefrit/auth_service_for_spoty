@@ -9,7 +9,7 @@
         "strict": true,
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
-
+        "useUnknownInCatchVariables": false,
         "module": "amd",
 
         "removeComments": true,

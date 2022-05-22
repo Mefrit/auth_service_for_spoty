@@ -1,11 +1,14 @@
-# start server
+# start server for authentification
 
-python app.py -> localhost:4567
+python app.py
+application -> localhost:4567
 
 # load static
 
 cd static/spoty_web
-run: gulp build
+run:
+npm install
+gulp build
 
 # configure
 

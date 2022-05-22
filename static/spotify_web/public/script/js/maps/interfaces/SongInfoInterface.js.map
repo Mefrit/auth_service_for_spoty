@@ -1,0 +1,1 @@
+{"version":3,"sources":["interfaces/SongInfoInterface.ts"],"names":[],"mappings":"","file":"../../interfaces/SongInfoInterface.js","sourcesContent":["export interface SongInfoInterface {\r\n    image: string;\r\n    name: string;\r\n    artist_name: string;\r\n    audio?: string;\r\n}\r\n"]}

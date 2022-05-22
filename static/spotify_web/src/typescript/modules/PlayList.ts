@@ -1,23 +1,24 @@
 import { PlayListItem } from "./PlaylistItem";
+import { PlayListInterface, PlayListItemInterface } from "../interfaces/PlayListInterface";
 export class PlayList {
-    list: any;
+    list: PlayListItemInterface[];
     title: string;
     type: string;
     url: string;
-    constructor(conf: any) {
+    constructor(conf: PlayListInterface) {
         this.list = conf.list;
         this.title = conf.title;
         this.type = conf.type;
         this.url = conf.url;
     }
-    renderListItem(list: any[]): string[] {
+    renderListItem(list: PlayListItemInterface[]): string[] {
         let play_list_item;
         if (list.length === 0) {
             return ["<h4>Список пуст</h4>"];
         }
         return list
             .filter((elem) => elem.audio !== "")
-            .map((elem: any, index, arr) => {
+            .map((elem: PlayListItemInterface, index, arr) => {
                 play_list_item = new PlayListItem(elem, this.type, this.url, index);
                 return play_list_item.render();
             });

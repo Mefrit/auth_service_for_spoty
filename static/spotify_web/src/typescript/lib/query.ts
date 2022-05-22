@@ -1,39 +1,70 @@
-export function postJSON(url: string, args: any) {
+import { DefaultRequest, DefaultJumendoRequest, GetUserInfoInterface } from "../interfaces/defaultInterface";
+export function postJSON(url: string, args: unknown): Promise<any> {
     return new Promise((resolve, reject) => {
-        fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json;charset=utf-8",
-            },
-            body: JSON.stringify({ ...args }),
-        }).then((data) => {
-            try {
-                const parsed = data.json();
-                resolve(parsed);
-            } catch (err: any) {
-                resolve({ result: false, message: err.toString() });
-            }
-        });
+        try {
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=utf-8",
+                },
+                body: JSON.stringify(args),
+            }).then((data) => {
+                try {
+                    const parsed = data.json();
+                    resolve(parsed);
+                } catch (err: unknown) {
+                    resolve({ result: false, message: err });
+                }
+            });
+        } catch (e: unknown) {
+            alert("ERROR " + e);
+        }
     });
 }
 
-export async function getJSON(url: string) {
+export async function getJSON(url: string): Promise<DefaultJumendoRequest> {
     return new Promise((resolve, reject) => {
-        return fetch(url).then((data: any) => {
-            try {
+        try {
+            return fetch(url).then((data) => {
                 const parsed = data.json();
                 resolve(parsed);
-            } catch (err: any) {
-                resolve({ result: false, message: err.toString() });
+            });
+        } catch (e: unknown) {
+            alert("ERROR " + e);
+        }
+    });
+}
+export function getParams(url = window.location) {
+    let params: {
+        [key: string]: string;
+    } = {};
+    const url_str = url.toString();
+    new URL(url_str).searchParams.forEach(function (val: string, key: string) {
+        params[key] = val; // Пушим пары ключ / значение (key / value) в объект
+    });
+    return params;
+}
+export async function getCurentUserInfo(accessToken: string): Promise<GetUserInfoInterface> {
+    return new Promise((resolve, reject) => {
+        const url =
+            "https://api.jamendo.com/v3.0/users/?client_id=cf25482b&format=jsonpretty&access_token=" + accessToken;
+        getJSON(url).then((data: DefaultJumendoRequest) => {
+            if (data.headers.status === "success") {
+                resolve({ result: true, user: data.results[0] });
+            } else {
+                resolve({ result: false, message: data.headers.error_message });
             }
         });
     });
 }
-export function getParams(url = window.location) {
-    let params: any = {};
-    const url_str = url.toString();
-    new URL(url_str).searchParams.forEach(function (val, key) {
-        params[key] = val; // Пушим пары ключ / значение (key / value) в объект
+export async function getDataFromApi(url: string): Promise<DefaultRequest> {
+    return new Promise((resolve, reject) => {
+        getJSON(url).then((data: DefaultJumendoRequest) => {
+            if (data.headers.status === "success") {
+                resolve({ result: true, data: data.results });
+            } else {
+                resolve({ result: false, message: data.headers.error_message });
+            }
+        });
     });
-    return params;
 }

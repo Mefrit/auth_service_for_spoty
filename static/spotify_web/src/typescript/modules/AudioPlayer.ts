@@ -1,25 +1,29 @@
 import { SongInfoPlayer } from "./SongInfoPlayer";
+import { SettingsInterface, DefaultRequest, SongData, DefaultJumendoRequest } from "../interfaces/defaultInterface";
+import { ApiInterface } from "../interfaces/ApiInterface";
+import { AudioPlayerInterface } from "../interfaces/AudioPlayerInterface";
+import { SongInfoInterface } from "../interfaces/SongInfoInterface";
 export class AudioPlayer {
-    dom_audioPlayer: any;
-    Api: any;
-    songInfoPlayer: any;
-    settings: any;
+    domAudioPlayer: HTMLAudioElement;
+    Api: ApiInterface;
+    songInfoPlayer: HTMLElement;
+    settings: SettingsInterface;
     playBack: HTMLElement;
     playForward: HTMLElement;
-    playProgress: HTMLElement | any;
+    playProgress: HTMLInputElement;
     playVolume: HTMLElement;
     playSoundMute: HTMLElement;
     playPause: HTMLElement;
-    is_played: boolean;
+    isPlayed: boolean;
     curent_song_index: number;
     curent_api_url: string;
-    play_timeStart: HTMLElement;
+    playTimeStart: HTMLElement;
     playSvgPath: HTMLElement;
-    play_timeEnd: HTMLElement;
+    playTimeEnd: HTMLElement;
     curent_volume: number;
-    constructor(conf: any) {
-        this.is_played = false;
-        this.dom_audioPlayer = conf.audioPlayer;
+    constructor(conf: AudioPlayerInterface) {
+        this.isPlayed = false;
+        this.domAudioPlayer = conf.audioPlayer;
         this.curent_volume = 50;
         this.curent_song_index = 0;
         this.curent_api_url = "";
@@ -33,8 +37,8 @@ export class AudioPlayer {
         this.playVolume = conf.playVolume;
         this.playPause = conf.playPause;
         this.playSoundMute = conf.playSoundMute;
-        this.play_timeStart = conf.timeStart;
-        this.play_timeEnd = conf.timeEnd;
+        this.playTimeStart = conf.timeStart;
+        this.playTimeEnd = conf.timeEnd;
         this.playSvgPath = conf.playSvgPath;
         this.initEvents();
     }
@@ -44,48 +48,46 @@ export class AudioPlayer {
         return ("0" + full_minutes).slice(-2) + ":" + ("0" + secunds).slice(-2);
     }
     timeupdate = () => {
-        const current_time = this.dom_audioPlayer.currentTime;
-        const duration = this.dom_audioPlayer.duration;
-
-        this.play_timeStart.innerHTML = this.getTimeFromSecunds(current_time + 0.25);
-
-        this.play_timeEnd.innerHTML = this.getTimeFromSecunds(duration);
-        this.playProgress.value = Math.round(((current_time + 0.25) / duration) * 100);
+        const currentTime = this.domAudioPlayer.currentTime;
+        const duration = this.domAudioPlayer.duration;
+        this.playTimeStart.innerHTML = this.getTimeFromSecunds(currentTime + 0.25);
+        this.playTimeEnd.innerHTML = this.getTimeFromSecunds(duration);
+        this.playProgress.value = Math.round(((currentTime + 0.25) / duration) * 100).toString();
     };
-    changePlayProgress = (ev: any) => {
-        const new_part = ev.target.value;
-        const duration = this.dom_audioPlayer.duration;
-        this.dom_audioPlayer.currentTime = Math.round((duration / 100) * new_part);
+    changePlayProgress = (ev: Event) => {
+        if (ev.target) {
+            const new_part = (ev.target as HTMLInputElement).value;
+            const duration = this.domAudioPlayer.duration;
+            this.domAudioPlayer.currentTime = Math.round((duration / 100) * Number(new_part));
+        }
     };
     muteSound = () => {
-        if (this.dom_audioPlayer.volume === 0) {
-            this.dom_audioPlayer.volume = this.curent_volume / 100;
+        if (this.domAudioPlayer.volume === 0) {
+            this.domAudioPlayer.volume = this.curent_volume / 100;
         } else {
-            this.dom_audioPlayer.volume = 0;
+            this.domAudioPlayer.volume = 0;
         }
     };
     playPauseSong = () => {
-        if (this.is_played) {
+        if (this.isPlayed) {
             this.playSvgPath.setAttribute(
                 "d",
                 "M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"
             );
-            this.dom_audioPlayer.pause();
+            this.domAudioPlayer.pause();
         } else {
             this.playSvgPath.setAttribute("d", "M0,0 0,16 5,16 5,0z M 15,0 15,16 10,16 10,0z");
-            this.dom_audioPlayer.play();
+            this.domAudioPlayer.play();
         }
-        this.is_played = !this.is_played;
+        this.isPlayed = !this.isPlayed;
     };
-    playForward = () => {
-        this.dom_audioPlayer.pause();
-
+    playForwardEvent = () => {
+        this.domAudioPlayer.pause();
         if (this.curent_api_url)
-            this.Api.getDataFromApi(this.curent_api_url).then((answer: any) => {
+            this.Api.getDataFromApi(this.curent_api_url).then((answer: DefaultRequest) => {
                 if (answer.result) {
                     const start_tracks = answer.data[0].tracks ? answer.data[0].tracks : answer.data;
-
-                    const track = start_tracks.filter((elem: any) => {
+                    const track = start_tracks.filter((elem: { audio: string }) => {
                         return elem.audio !== "";
                     });
                     if (track.length > 0) {
@@ -94,18 +96,16 @@ export class AudioPlayer {
                         } else {
                             this.curent_song_index++;
                         }
-
                         this.playSong(track[this.curent_song_index]);
                     }
                 }
             });
-        this.is_played = !this.is_played;
+        this.isPlayed = !this.isPlayed;
     };
-    playBack = () => {
-        this.dom_audioPlayer.pause();
-
+    playBackEvent = () => {
+        this.domAudioPlayer.pause();
         if (this.curent_api_url)
-            this.Api.getDataFromApi(this.curent_api_url).then((answer: any) => {
+            this.Api.getDataFromApi(this.curent_api_url).then((answer: DefaultRequest) => {
                 if (answer.result) {
                     const start_tracks = answer.data[0].tracks ? answer.data[0].tracks : answer.data;
                     if (start_tracks.length > 0) {
@@ -118,30 +118,34 @@ export class AudioPlayer {
                     }
                 }
             });
-        this.is_played = !this.is_played;
+        this.isPlayed = !this.isPlayed;
     };
     initEvents() {
-        this.dom_audioPlayer.addEventListener("timeupdate", this.timeupdate);
+        this.domAudioPlayer.addEventListener("timeupdate", this.timeupdate);
         this.playProgress.addEventListener("change", this.changePlayProgress);
         this.playSoundMute.addEventListener("click", this.muteSound);
-        this.playVolume.addEventListener("change", (ev: any) => {
-            this.curent_volume = ev.target.value;
-            this.dom_audioPlayer.volume = ev.target.value / 100;
+        this.playVolume.addEventListener("change", (ev: Event) => {
+            if (ev.target) {
+                const value = (ev.target as HTMLInputElement).value;
+                this.curent_volume = Number(value);
+                this.domAudioPlayer.volume = Number(value) / 100;
+            }
         });
         this.playPause.addEventListener("click", this.playPauseSong);
-        this.playForward.addEventListener("click", this.playForward);
-        this.playBack.addEventListener("click", this.playBack);
+        this.playForward.addEventListener("click", this.playForwardEvent);
+        this.playBack.addEventListener("click", this.playBackEvent);
     }
-
-    playSong(data: any) {
+    playSong(data: SongInfoInterface) {
         this.songInfoPlayer.innerHTML = "";
-        this.dom_audioPlayer.setAttribute("src", data.audio);
-        this.dom_audioPlayer.play();
-        this.is_played = true;
+        if (data.audio) {
+            this.domAudioPlayer.setAttribute("src", data.audio);
+        }
+        this.domAudioPlayer.play();
+        this.isPlayed = true;
         const song_info = new SongInfoPlayer(data);
         this.songInfoPlayer.insertAdjacentHTML("beforeend", song_info.render());
     }
-    loadArtistSong(artist_id: any) {
+    loadArtistSong(artist_id: string) {
         const params = new URLSearchParams({
             artist_id: artist_id,
             mode: "artist",
@@ -162,8 +166,8 @@ export class AudioPlayer {
         });
         document.location.href = "play?" + params.toString();
     }
-    async play(data: any) {
-        let answer: any;
+    async play(data: SongData) {
+        let answer;
         if (data) {
             this.curent_api_url = data.url;
             this.curent_song_index = data.index;
@@ -182,7 +186,7 @@ export class AudioPlayer {
                 this.playSvgPath.setAttribute("d", "M0,0 0,16 5,16 5,0z M 15,0 15,16 10,16 10,0z");
                 this.playSong(answer.data[0]);
             } else {
-                this.dom_audioPlayer.pause();
+                this.domAudioPlayer.pause();
             }
         }
     }

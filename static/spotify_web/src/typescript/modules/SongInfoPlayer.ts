@@ -1,6 +1,7 @@
+import { SongInfoInterface } from "../interfaces/SongInfoInterface";
 export class SongInfoPlayer {
-    item: any;
-    constructor(item: any) {
+    item: SongInfoInterface;
+    constructor(item: SongInfoInterface) {
         this.item = item;
     }
     render() {
