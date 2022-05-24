@@ -8,11 +8,11 @@ export interface DefaultJumendoRequest {
     results: any[];
 }
 export interface SettingsInterface {
-    clientId: string;
-    api_key: string;
-    secret: string;
-    api_base: string;
-    code: string;
+    CLIENT_ID: string;
+    API_KEY: string;
+    SECRET: string;
+    API_BASE: string;
+    CODE: string;
 }
 export interface SongData {
     id: string;

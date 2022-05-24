@@ -92,7 +92,6 @@ class MainPage {
             /// afhnbcns
             const urlArtist = `https://api.jamendo.com/v3.0/artists/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=12&imagesize=100`;
             const albumsArtist: DefaultRequest = await getDataFromApi(urlArtist);
-
             playlist = new PlayList({
                 list: albumsArtist.data,
                 title: "Исполнители",
