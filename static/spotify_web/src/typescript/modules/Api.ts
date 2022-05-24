@@ -1,5 +1,5 @@
 import { getJSON } from "../lib/query";
-import { DefaultJumendoRequest } from "../interfaces/defaultInterface";
+import { DefaultJumendoRequest } from "../interfaces/DefaultInterface";
 import { ApiInterface } from "../interfaces/ApiInterface";
 export class Api implements ApiInterface {
     loadSong(songId: string, clientId: string) {

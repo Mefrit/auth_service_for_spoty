@@ -1,6 +1,6 @@
-import { DefaultRequest } from "./defaultInterface";
+import { DefaultRequest } from "./DefaultInterface";
 export interface ApiInterface {
-    loadSong(songId: string, clientId: string): Promise<object | any>;
-    loadPlayList(playListId: string, clientId: string): Promise<object | any>;
-    getDataFromApi(url: string): Promise<DefaultRequest | any>;
+    loadSong(songId: string, clientId: string): Promise<object | unknown>;
+    loadPlayList(playListId: string, clientId: string): Promise<object | unknown>;
+    getDataFromApi(url: string): Promise<DefaultRequest | unknown>;
 }

@@ -22,7 +22,7 @@ import {
 
 import { ApiInterface } from "./interfaces/ApiInterface";
 import { PlayListItemInterface } from "./interfaces/PlayListInterface";
-import { SettingsInterface, PlayerInterfaceInput } from "./interfaces/defaultInterface";
+import { SettingsInterface, PlayerInterfaceInput } from "./interfaces/DefaultInterface";
 import { PlayInterface } from "./interfaces/PlayInterface";
 class Play {
     userInfoDom: HTMLElement;

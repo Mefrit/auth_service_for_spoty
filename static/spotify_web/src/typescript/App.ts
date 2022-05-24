@@ -27,7 +27,7 @@ import {
     GetUserInfoInterface,
     PlayerInterfaceInput,
     DefaultRequest,
-} from "./interfaces/defaultInterface";
+} from "./interfaces/DefaultInterface";
 import { MainPageInterface } from "./interfaces/MainPageInterface";
 let tokenInfo: { accessToken: string } = { accessToken: "" };
 
@@ -129,22 +129,24 @@ if (urlParams.code && !tokenInfo.accessToken && !localStorage.getItem("accessTok
     postJSON("/", {
         code: urlParams.code,
     }).then(async (answer) => {
-        const parsedToken = JSON.parse(answer.accessToken);
-        if (parsedToken.error) {
-            alert("ERROR =>" + parsedToken.error_description);
-        } else {
-            registrationLink.style.display = "none";
-            localStorage.setItem("accessToken", parsedToken.access_token);
-            localStorage.setItem("timeSetAccessToken", new Date().getTime().toString());
-            tokenInfo = parsedToken.access_token;
-            const userInfo: GetUserInfoInterface = await getCurentUserInfo(parsedToken.access_token);
-
-            if (userInfoDom && userInfo.result) {
-                localStorage.setItem("id_user", userInfo.user.id);
-                const userInfoContent = getTemplateForUserInfo(userInfo.user);
-                userInfoDom.insertAdjacentHTML("beforeend", userInfoContent);
+        if (answer.result && answer.accessToken) {
+            const parsedToken = JSON.parse(answer.accessToken);
+            if (parsedToken.error) {
+                alert("ERROR =>" + parsedToken.error_description);
             } else {
-                alert(userInfo.message);
+                registrationLink.style.display = "none";
+                localStorage.setItem("accessToken", parsedToken.access_token);
+                localStorage.setItem("timeSetAccessToken", new Date().getTime().toString());
+                tokenInfo = parsedToken.access_token;
+                const userInfo: GetUserInfoInterface = await getCurentUserInfo(parsedToken.access_token);
+
+                if (userInfoDom && userInfo.result && userInfo.user) {
+                    localStorage.setItem("id_user", userInfo.user?.id);
+                    const userInfoContent = getTemplateForUserInfo(userInfo.user);
+                    userInfoDom.insertAdjacentHTML("beforeend", userInfoContent);
+                } else {
+                    alert(userInfo.message);
+                }
             }
         }
     });
@@ -153,7 +155,7 @@ if (urlParams.code && !tokenInfo.accessToken && !localStorage.getItem("accessTok
         const timeSetAccessToken = Number(localStorage.getItem("timeSetAccessToken"));
         const dateSetToken: Date = new Date(timeSetAccessToken);
         const curentDate: Date = new Date();
-        if (curentDate.getTime() - dateSetToken.getTime() > 5000000) {
+        if (curentDate.getTime() - dateSetToken.getTime() > settings.TIME_TO_BLOCK) {
             localStorage.removeItem("timeSetAccessToken");
             localStorage.removeItem("accessToken");
         } else {

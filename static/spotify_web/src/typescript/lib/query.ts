@@ -1,5 +1,8 @@
-import { DefaultRequest, DefaultJumendoRequest, GetUserInfoInterface } from "../interfaces/defaultInterface";
-export function postJSON(url: string, args: unknown): Promise<any> {
+import { DefaultRequest, DefaultJumendoRequest, GetUserInfoInterface } from "../interfaces/DefaultInterface";
+export function postJSON(
+    url: string,
+    args: unknown
+): Promise<{ accessToken?: string; result?: boolean; message?: unknown }> {
     return new Promise((resolve, reject) => {
         try {
             fetch(url, {
@@ -49,10 +52,15 @@ export async function getCurentUserInfo(accessToken: string): Promise<GetUserInf
         const url =
             "https://api.jamendo.com/v3.0/users/?client_id=cf25482b&format=jsonpretty&access_token=" + accessToken;
         getJSON(url).then((data: DefaultJumendoRequest) => {
-            if (data.headers.status === "success") {
-                resolve({ result: true, user: data.results[0] });
+            if (data.headers.status === "success" && data.results) {
+                const result: { image: string; dispname: string; id: string } = data.results[0];
+                resolve({ result: true, user: result });
             } else {
-                resolve({ result: false, message: data.headers.error_message });
+                resolve({
+                    result: false,
+                    message: data.headers.error_message,
+                    user: { image: "", dispname: "", id: "" },
+                });
             }
         });
     });

@@ -1,4 +1,4 @@
-import { SettingsInterface, PlayerInterfaceInput } from "./defaultInterface";
+import { SettingsInterface, PlayerInterfaceInput } from "./DefaultInterface";
 import { ApiInterface } from "./ApiInterface";
 export interface SearchInterface {
     userInfoDom: HTMLElement;

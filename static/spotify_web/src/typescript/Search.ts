@@ -21,7 +21,7 @@ import {
     playsBtn,
     search_string_dom,
 } from "./lib/domInit";
-import { SettingsInterface, PlayerInterfaceInput, DefaultRequest } from "./interfaces/defaultInterface";
+import { SettingsInterface, PlayerInterfaceInput, DefaultRequest } from "./interfaces/DefaultInterface";
 import { SearchInterface } from "./interfaces/SearchInterface";
 import { ApiInterface } from "./interfaces/ApiInterface";
 
@@ -88,11 +88,11 @@ class Search {
                 url: url_search,
             });
             this.albumsContent.insertAdjacentHTML("beforeend", playlist.render());
-            const playsBtn: any = document.getElementsByClassName("play-btn");
+            const playsBtn = document.getElementsByClassName("play-btn");
             this.initListenMusicEvent(playsBtn);
         });
     };
-    initListenMusicEvent(playsBtn: any) {
+    initListenMusicEvent(playsBtn: HTMLCollection) {
         if (playsBtn) {
             for (var i = 0; i < playsBtn.length; i++) {
                 playsBtn[i].addEventListener("click", this.playMusic);

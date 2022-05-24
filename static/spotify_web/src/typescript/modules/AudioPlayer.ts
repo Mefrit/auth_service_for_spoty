@@ -1,5 +1,5 @@
 import { SongInfoPlayer } from "./SongInfoPlayer";
-import { SettingsInterface, DefaultRequest, SongData, DefaultJumendoRequest } from "../interfaces/defaultInterface";
+import { SettingsInterface, DefaultRequest, SongData, DefaultJumendoRequest } from "../interfaces/DefaultInterface";
 import { ApiInterface } from "../interfaces/ApiInterface";
 import { AudioPlayerInterface } from "../interfaces/AudioPlayerInterface";
 import { SongInfoInterface } from "../interfaces/SongInfoInterface";

@@ -1,8 +1,8 @@
-import { SettingsInterface } from "./defaultInterface";
+import { SettingsInterface } from "./DefaultInterface";
 import { ApiInterface } from "./ApiInterface";
 export interface AudioPlayerInterface {
     audioPlayer: HTMLAudioElement;
-    api: ApiInterface | any;
+    api: ApiInterface;
     settings: SettingsInterface;
     songInfoPlayer: HTMLElement;
     playPause: HTMLElement;
