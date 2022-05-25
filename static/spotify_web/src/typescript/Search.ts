@@ -2,6 +2,7 @@ import { PlayList } from "./modules/PlayList";
 import { AudioPlayer } from "./modules/AudioPlayer";
 import { Api } from "./modules/Api";
 import { settings } from "./settings";
+import { setUserInfoFromStorage } from "./lib/reqistration";
 import {
     userInfoDom,
     searchBtn,
@@ -20,6 +21,7 @@ import {
     songs,
     playsBtn,
     search_string_dom,
+    registrationLink,
 } from "./lib/domInit";
 import { SettingsInterface, PlayerInterfaceInput, DefaultRequest } from "./interfaces/DefaultInterface";
 import { SearchInterface } from "./interfaces/SearchInterface";
@@ -102,8 +104,19 @@ class Search {
     initSearchEvents() {
         this.searchBtn.addEventListener("click", this.startSearch);
     }
+    setRegistrationLink() {
+        registrationLink?.setAttribute(
+            "href",
+            `https://api.jamendo.com/v3.0/oauth/authorize?client_id=${this.settings.CLIENT_ID}&redirect_uri=http://localhost:4567/&response_type=code`
+        );
+    }
     async init() {
         // вход
+
+        this.setRegistrationLink();
+        if (localStorage.getItem("accessToken") !== "undefined") {
+            setUserInfoFromStorage(userInfoDom, registrationLink);
+        }
         this.initSearchEvents();
     }
     start() {

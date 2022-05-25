@@ -71,7 +71,7 @@ export async function getDataFromApi(url: string): Promise<DefaultRequest> {
             if (data.headers.status === "success") {
                 resolve({ result: true, data: data.results });
             } else {
-                resolve({ result: false, message: data.headers.error_message });
+                resolve({ result: false, message: data.headers.error_message, data: {} });
             }
         });
     });

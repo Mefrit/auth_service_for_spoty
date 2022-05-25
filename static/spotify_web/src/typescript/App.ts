@@ -3,7 +3,7 @@ import { PlayList } from "./modules/PlayList";
 import { AudioPlayer } from "./modules/AudioPlayer";
 import { Api } from "./modules/Api";
 import { settings } from "./settings";
-
+import { setUserInfoFromStorage, getTemplateForUserInfo } from "./lib/reqistration";
 import {
     userInfoDom,
     playsBtn,
@@ -28,17 +28,9 @@ import {
     PlayerInterfaceInput,
     DefaultRequest,
 } from "./interfaces/DefaultInterface";
+import { PlayListItemInterface } from "./interfaces/PlayListInterface";
 import { MainPageInterface } from "./interfaces/MainPageInterface";
 let tokenInfo: { accessToken: string } = { accessToken: "" };
-
-function getTemplateForUserInfo(userInfo: { image: string; dispname: string }) {
-    return `
-        <div class="user-info">
-            <img src="${userInfo.image}"alt="image_profile">
-            <span>${userInfo.dispname}</span>
-        </div>
-    `;
-}
 
 class MainPage {
     userInfoDom: HTMLElement;
@@ -131,6 +123,7 @@ if (urlParams.code && !tokenInfo.accessToken && !localStorage.getItem("accessTok
     }).then(async (answer) => {
         if (answer.result && answer.accessToken) {
             const parsedToken = JSON.parse(answer.accessToken);
+            console.log(parsedToken);
             if (parsedToken.error) {
                 alert("ERROR =>" + parsedToken.error_description);
             } else {
@@ -151,33 +144,9 @@ if (urlParams.code && !tokenInfo.accessToken && !localStorage.getItem("accessTok
         }
     });
 } else {
+    console.log(localStorage.getItem("accessToken"));
     if (localStorage.getItem("accessToken") !== "undefined") {
-        const timeSetAccessToken = Number(localStorage.getItem("timeSetAccessToken"));
-        const dateSetToken: Date = new Date(timeSetAccessToken);
-        const curentDate: Date = new Date();
-        if (curentDate.getTime() - dateSetToken.getTime() > settings.TIME_TO_BLOCK) {
-            localStorage.removeItem("timeSetAccessToken");
-            localStorage.removeItem("accessToken");
-        } else {
-            const tokenFromStorage = localStorage.getItem("accessToken");
-            if (tokenFromStorage) {
-                tokenInfo = { accessToken: tokenFromStorage };
-                getCurentUserInfo(tokenInfo.accessToken).then((userInfo: GetUserInfoInterface) => {
-                    if (userInfo.result) {
-                        localStorage.setItem("id_user", userInfo.user.id);
-                        registrationLink.style.display = "none";
-                        if (userInfoDom) {
-                            const userInfoContent = getTemplateForUserInfo(userInfo.user);
-                            userInfoDom.insertAdjacentHTML("beforeend", userInfoContent);
-                        } else {
-                            alert("Error: " + userInfo.message);
-                        }
-                    } else {
-                        alert(userInfo.message);
-                    }
-                });
-            }
-        }
+        setUserInfoFromStorage(userInfoDom, registrationLink);
     }
 }
 

@@ -17,3 +17,8 @@ gulp build
 # configure
 
 static\spotify_web\src\typescript\settings.ts
+
+тестовый аккаунт для Jumendo music - Апи этого сервиса используется в приложении
+
+mihail_fokin_1999@mail.ru
+56189968,Ru
