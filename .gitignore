@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 static/spotify_web/public/**/*.js
+static/spotify_web/public/**/*.map
 **/*.css
 
 # production

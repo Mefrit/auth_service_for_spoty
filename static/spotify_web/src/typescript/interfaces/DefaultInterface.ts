@@ -1,6 +1,6 @@
 export interface DefaultRequest {
     result: boolean;
-    data?: object;
+    data: object;
     message?: string | unknown;
 }
 export interface DefaultJumendoRequest {
