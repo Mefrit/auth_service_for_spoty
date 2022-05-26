@@ -8,7 +8,7 @@ export interface SearchInterface {
     settings: SettingsInterface;
     songInfoPlayer: HTMLElement;
     playsBtn: HTMLCollection;
-    search_string_dom: HTMLElement;
+    searchStringDom: HTMLElement;
     searchBtn: HTMLElement;
     albumsContent: HTMLElement;
 }

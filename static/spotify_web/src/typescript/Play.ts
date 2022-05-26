@@ -1,7 +1,7 @@
 import { getParams } from "./lib/query";
 import { PlayList } from "./modules/PlayList";
 import { AudioPlayer } from "./modules/AudioPlayer";
-
+import { setUserInfoFromStorage } from "./lib/reqistration";
 import { Api } from "./modules/Api";
 import { settings } from "./settings";
 import {
@@ -18,6 +18,7 @@ import {
     playTimeStart,
     playSvgPath,
     playTimeEnd,
+    registrationLink,
 } from "./lib/domInit";
 
 import { ApiInterface } from "./interfaces/ApiInterface";
@@ -107,7 +108,7 @@ class Play {
     }
     async prepareSongs() {
         if (this.urlParams.playListId) {
-            const songs = await this.api.loadPlayList(this.urlParams.playListId, this.settings.CLIENT_ID);
+            const songs: unknown = await this.api.loadPlayList(this.urlParams.playListId, this.settings.CLIENT_ID);
             const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=40&id=${this.urlParams.playListId}`;
             if (songs.result && songs.data.length > 0) {
                 let playlist = new PlayList({
@@ -123,8 +124,7 @@ class Play {
         }
     }
     setRegistrationLink() {
-        const link = document.getElementById("registrationLink");
-        link?.setAttribute(
+        registrationLink?.setAttribute(
             "href",
             `https://api.jamendo.com/v3.0/oauth/authorize?client_id=${this.settings.CLIENT_ID}&redirect_uri=http://localhost:4567/&response_type=code`
         );
@@ -140,6 +140,9 @@ class Play {
     async init() {
         // вход
         this.setRegistrationLink();
+        if (localStorage.getItem("accessToken") !== "undefined") {
+            setUserInfoFromStorage(userInfoDom, registrationLink);
+        }
         if (this.songsDom) {
             switch (this.urlParams.mode) {
                 case "lovesongs":

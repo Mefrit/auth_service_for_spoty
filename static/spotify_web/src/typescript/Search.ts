@@ -2,6 +2,7 @@ import { PlayList } from "./modules/PlayList";
 import { AudioPlayer } from "./modules/AudioPlayer";
 import { Api } from "./modules/Api";
 import { settings } from "./settings";
+import { setUserInfoFromStorage } from "./lib/reqistration";
 import {
     userInfoDom,
     searchBtn,
@@ -19,7 +20,8 @@ import {
     playTimeEnd,
     songs,
     playsBtn,
-    search_string_dom,
+    searchStringDom,
+    registrationLink,
 } from "./lib/domInit";
 import { SettingsInterface, PlayerInterfaceInput, DefaultRequest } from "./interfaces/DefaultInterface";
 import { SearchInterface } from "./interfaces/SearchInterface";
@@ -34,13 +36,13 @@ class Search {
     settings: SettingsInterface;
     search_string: string;
     searchBtn: HTMLElement;
-    search_string_dom: HTMLElement;
+    searchStringDom: HTMLElement;
     playsBtn: HTMLCollection;
     search_mode: string;
     constructor(conf: SearchInterface) {
         this.userInfoDom = conf.userInfoDom;
         this.songsDom = conf.songs;
-        this.search_string_dom = conf.search_string_dom;
+        this.searchStringDom = conf.searchStringDom;
         this.searchBtn = conf.searchBtn;
 
         this.Api = conf.api;
@@ -74,7 +76,7 @@ class Search {
         }
     }
     startSearch = () => {
-        const value = (this.search_string_dom as HTMLInputElement).value;
+        const value = (this.searchStringDom as HTMLInputElement).value;
         const url_search =
             `https://api.jamendo.com/v3.0/tracks/?client_id=${this.settings.CLIENT_ID}&format=jsonpretty&limit=40&search=` +
             value.trim();
@@ -101,9 +103,26 @@ class Search {
     }
     initSearchEvents() {
         this.searchBtn.addEventListener("click", this.startSearch);
+        this.searchStringDom.addEventListener("keydown", (event) => {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                this.startSearch();
+            }
+        });
+    }
+    setRegistrationLink() {
+        registrationLink?.setAttribute(
+            "href",
+            `https://api.jamendo.com/v3.0/oauth/authorize?client_id=${this.settings.CLIENT_ID}&redirect_uri=http://localhost:4567/&response_type=code`
+        );
     }
     async init() {
         // вход
+
+        this.setRegistrationLink();
+        if (localStorage.getItem("accessToken") !== "undefined") {
+            setUserInfoFromStorage(userInfoDom, registrationLink);
+        }
         this.initSearchEvents();
     }
     start() {
@@ -136,7 +155,7 @@ const main = new Search({
     player: player,
     settings: settings,
     songInfoPlayer: songInfoPlayer,
-    search_string_dom: search_string_dom,
+    searchStringDom: searchStringDom,
     searchBtn: searchBtn,
     albumsContent: albumsContent,
     playsBtn: playsBtn,
