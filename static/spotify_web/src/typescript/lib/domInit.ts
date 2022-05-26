@@ -16,5 +16,5 @@ export const playTimeStart = document.getElementById("play-time-start")!;
 export const songs = document.getElementById("songs")!;
 export const playTimeEnd = document.getElementById("play-time-end")!;
 export const registrationLink = document.getElementById("registrationLink")!;
-export const search_string_dom = document.getElementById("search-string")!;
+export const searchStringDom = document.getElementById("search-string")!;
 export const searchBtn = document.getElementById("search-btn")!;
