@@ -2,6 +2,7 @@
 
 static/spotify_web/public/**/*.js
 static/spotify_web/public/**/*.map
+static/spotify_web/public/**/*.js.map
 **/*.css
 
 # production
