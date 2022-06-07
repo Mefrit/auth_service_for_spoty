@@ -4,13 +4,17 @@
     color: @white;
     background-color: @back_audio;
     display: flex;
-    min-height: 10%;
+    padding: 10px 0px;
+    padding-right: 40px;
+    min-height: 12%;
     font-family: "MontserratRegular", "MontserratBold", "MontserratItalic", sans-serif;
     justify-content: space-between;
     align-items: center;
+
     &__interface {
         align-items: center;
         width: 35%;
+        margin-left: -80px;
         display: flex;
         flex-direction: column;
     }
@@ -44,6 +48,9 @@
     }
     &__imgadd2collection {
         fill: @btn_player_arrows;
+    }
+    &__description {
+        width: 200px;
     }
 }
 .action {

@@ -30,3 +30,13 @@ export class Api implements ApiInterface {
         });
     }
 }
+const root = ReactDOM.createRoot(document.getElementById("root"));
+console.log("MAIN111111111111");
+root.render(
+    <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<MainPage init={config} />} />
+            <Route path="/search" element={<Play init={config} />} />
+        </Routes>
+    </BrowserRouter>
+);

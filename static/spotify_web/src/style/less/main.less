@@ -12,7 +12,7 @@ body {
 }
 .user-info {
     display: flex;
-    width: 200px;
+    width: 170px;
 
     align-items: center;
     justify-content: space-between;
@@ -20,10 +20,25 @@ body {
 .container {
     display: flex;
     width: 100%;
-    height: 90%;
+    height: 100%;
     max-height: 100vh;
     background-color: @gray;
     font-family: "MontserratRegular", "MontserratBold", "MontserratItalic", sans-serif;
+}
+.playlist {
+    max-height: 720px;
+    overflow: auto;
+    padding: 10px;
+}
+.playlist::-webkit-scrollbar-track {
+    background-color: @black;
+}
+.playlist::-webkit-scrollbar {
+    width: 12px; /* ширина scrollbar */
+}
+.playlist::-webkit-scrollbar-thumb {
+    background-color: @scrol_color;
+    border-radius: 1px;
 }
 .user-info-content {
     color: @white;
@@ -49,6 +64,10 @@ body {
     background: @back_main_content;
     padding-top: 25px;
     overflow: auto;
+    max-height: 940px;
+}
+.content-search {
+    overflow: hidden;
 }
 .content::-webkit-scrollbar-track {
     background-color: @black;
@@ -62,14 +81,15 @@ body {
 }
 .search_content {
     padding: 5px;
+    height: 740px;
 }
 .registration-link {
-    padding-top: 35px;
+    // padding-top: 35px;
 }
 .search {
     padding: 5px;
     border-bottom: 1px solid white;
-    width: 100%;
+    width: 99%;
     display: flex;
 
     flex-direction: row;
@@ -86,6 +106,7 @@ body {
         box-sizing: border-box;
         background: @back_main_content;
         color: white;
+        margin-left: 6px;
     }
     &__text-interface {
         display: flex;
@@ -95,13 +116,32 @@ body {
         }
     }
     &__action {
-        margin-left: 25px;
+        margin-left: 15px;
         padding: 8px 15px;
         background-color: @border_gray;
         color: @white;
         cursor: pointer;
         border: 1px solid @white;
-        margin-top: 10px;
+        // margin-top: 10px;
         border-radius: 5px;
     }
+}
+.conten-react {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: flex-end;
+    height: 100%;
+    flex-wrap: nowrap;
+
+    overflow: auto;
+    &react__content {
+        height: 800px;
+        padding: 10px;
+    }
+}
+.content-page {
+    max-height: 900px;
+    // overflow: auto;
+    height: 100%;
 }
