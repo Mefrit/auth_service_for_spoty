@@ -67,10 +67,8 @@ export function AudioPlayer(props: any) {
     }, [volume]);
     useEffect(() => {
         audioRef.current.pause();
-        console.log("props.audioUrl 1111111", props.audioUrl);
         audioRef.current = new Audio(props.audioUrl);
         setTrackProgress(audioRef.current.currentTime);
-        console.log("isReady.current", isReady.current);
         if (isReady.current) {
             audioRef.current.play();
             setIsPlaying(true);
@@ -90,7 +88,7 @@ export function AudioPlayer(props: any) {
             }
         }, 1000);
     }
-    console.log("!!@!!@!@", props)
+
     return <div className="audio-player">
         <div id="song-info-player">
             <div className="song">

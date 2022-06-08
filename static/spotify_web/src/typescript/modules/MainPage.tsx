@@ -1,38 +1,8 @@
-import { postJSON, getParams, getCurentUserInfo, getDataFromApi } from "../lib/query";
+import { getDataFromApi } from "../lib/query";
 import { PlayList } from "../modules/PlayList";
 import { AudioPlayer } from "../modules/AudioPlayer";
-import { Api } from "../modules/Api";
-import { settings } from "../settings";
-import { Play } from "../modules/PlayModule"
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ReactDOM from "react-dom";
 import { useSearchParams } from "react-router-dom";
-import {
-    userInfoDom,
-    playsBtn,
-    albumsContent,
-    audioPlayer,
-    songInfoPlayer,
-    playPause,
-    playBack,
-    playForward,
-    playProgress,
-    playSoundMute,
-    playVolume,
-    playTimeStart,
-    playSvgPath,
-    playTimeEnd,
-    registrationLink,
-} from "./lib/domInit";
-
-import {
-    SettingsInterface,
-    GetUserInfoInterface,
-    PlayerInterfaceInput,
-    DefaultRequest,
-} from "../interfaces/DefaultInterface";
-import { MainPageInterface } from "../interfaces/MainPageInterface";
 import { useEffect, useState } from "react";
 
 import { Auth } from "./auth";
@@ -61,10 +31,11 @@ export function MainPage(props: any) {
             }
         }
 
-        load("track", "Популярное за неделю", urltop);
+        load("playlist", "Подборки", urljenre);
         load("artist", "Исполнители", urlartist);
         setTimeout(() => {
-            load("playlist", "Подборки", urljenre);
+
+            load("track", "Популярное за неделю", urltop);
         }, 1000)
         load("playlist", "Плейлисты", urlplaylist);
 

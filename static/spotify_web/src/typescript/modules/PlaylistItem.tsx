@@ -65,49 +65,10 @@ export function PlayListItem(props: any) {
             ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
         return ret.join('&');
     }
-    // getInfPlayer(item: PlayListItemInterface, url: string, index: string | number) {
-    //     let inf;
-    //     if (item.id) {
-    //         inf = { id: item.id };
-    //     }
-    //     if (url) {
-    //         inf = { ...inf, index: index, url: url };
-    //     }
-    //     inf = { ...inf, index: index, url: url, isAlbum: this.type === "album", isArtist: this.type === "artist" };
-    //     if (this.type === "playlist") {
-    //         inf = {
-    //             ...inf,
-    //             isPlaylist: true,
-    //         };
-    //     }
 
-    //     return JSON.stringify(inf);
-    // }
     const choseSonglist = (item: any) => {
         props.setSong(item)
     }
-    // const inf_for_player = this.getInfPlayer(this.item, this.url, this.index);\
-    //  loadArtistSong(artist_id: string) {
-    //     const params = new URLSearchParams({
-    //         artist_id: artist_id,
-    //         mode: "artist",
-    //     });
-    //     document.location.href = "play?" + params.toString();
-    // }
-    // loadPlayList(playListId: string) {
-    //     const params = new URLSearchParams({
-    //         playListId: playListId,
-    //         mode: "playlist",
-    //     });
-    //     document.location.href = "play?" + params.toString();
-    // }
-    // loadAlbumSong(album_id: string) {
-    //     const params = new URLSearchParams({
-    //         album_id: album_id,
-    //         mode: "album",
-    //     });
-    //     document.location.href = "play?" + params.toString();
-    // }
     return <div className="album-container__song-container">
         <div className={props.type === "track" ? " album_column" : "album"} >
             <div className={props.type === "track" ? " album_column__image-container" : "album__image"}>

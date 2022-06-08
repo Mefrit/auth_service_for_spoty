@@ -1,18 +1,8 @@
 import { PlayListItem } from "./PlaylistItem";
 import React from "react";
-import { useEffect, useState } from "react";
-import { PlayListInterface, PlayListItemInterface } from "../interfaces/PlayListInterface";
+import { PlayListItemInterface } from "../interfaces/PlayListInterface";
 export function PlayList(props: any) {
-    // list: PlayListItemInterface[];
-    // title: string;
-    // type: string;
-    // url: string;
-    // constructor(conf: PlayListInterface) {
-    //     this.list = conf.list;
-    //     this.title = conf.title;
-    //     this.type = conf.type;
-    //     this.url = conf.url;
-    // }
+
     function renderListItem(list: PlayListItemInterface[]): any {
         let play_list_item;
         if (list.length === 0) {
