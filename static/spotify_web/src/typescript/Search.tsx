@@ -15,6 +15,7 @@ export function Search(props: any) {
     const [author, setAuthor] = useState("");
     const [albumImage, setAlbumImage] = useState("#");
     const [audioUrl, setAudioUrl] = useState("#");
+    const [trackId, setTrackId] = useState(-1)
     console.log(props)
     useEffect(() => { }, [tracklist, load, searchparams])
     const startSearch = () => {
@@ -39,6 +40,7 @@ export function Search(props: any) {
         setNameSong(data.name);
         setAlbumImage(data.album_image);
         setAuthor(data.album_name)
+        setTrackId(data.id)
     }
     function renderTrack(list: any) {
         if (list.length === 0) {
@@ -80,7 +82,7 @@ export function Search(props: any) {
         {load ? <div className="search_content">Загрузка...</div> : <div id="albums-content" className="search_content">{renderTrack(tracklist)}</div>}
 
 
-        <AudioPlayer author={author} audioUrl={audioUrl} length={tracklist.length} albumImage={albumImage} nameSong={nameSong} changeSong={changeSong} />
+        <AudioPlayer author={author} audioUrl={audioUrl} length={tracklist.length} id_track={trackId} albumImage={albumImage} nameSong={nameSong} changeSong={changeSong} />
     </div>
 }
 const config = {

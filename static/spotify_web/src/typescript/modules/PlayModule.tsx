@@ -2,25 +2,56 @@
 import { PlayList } from "../modules/PlayList";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getDataFromApi } from "../lib/query";
-import { Auth } from "../modules/auth"
+import { getDataFromApi, postJSON } from "../lib/query";
+import { Auth } from "../modules/Auth"
 
 
 
-import { AudioPlayer } from "./AudioPlayer"
+import { AudioPlayer } from "./AudioPlayer";
+import { DefaultRequest } from "../interfaces/DefaultInterface"
+export interface trackDataInterface {
+    creationdate: string
+    id: string
+    name: string
+    shareurl: string
+    shorturl: string
+    user_id: string
+    user_name: string
+    zip: string
+    audio: string
+    artist_name: string
+    album_image: string
+}
+export interface favoriteUserDataInterface {
+    album_id: string
+    avatar: string
+    avatar_type: string
+    creationdate: string
+    dispname: string
+    id: string
+    lang: string
+    name: string
+    tracks: trackDataInterface[]
+}
 
 export function Play(props: any) {
-    const [songList, setSongList] = useState([]);
-    const [errorMsg, setError] = useState("");
-    const [title, setTitle] = useState("");
-    const [type, setType] = useState("");
-    const [url, setUrl] = useState("");
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [audioUrl, setAudioUrl] = useState("#");
-    const [nameSong, setNameSong] = useState("");
-    const [author, setAuthor] = useState("");
-    const [albumImage, setAlbumImage] = useState("#");
 
+    const [errorMsg, setError] = useState("");
+
+    const [playListInfo, setPlayListInfo] = useState({
+        songList: [],
+        title: "",
+        type: "",
+        url: ""
+    })
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [songInfo, setSongInfo] = useState({
+        audioUrl: "#",
+        nameSong: "",
+        author: "",
+        trackId: -1,
+        albumImage: ""
+    })
     useEffect(() => {
         const isPlayList = searchParams.get("isPlaylist") === "true";
         const isArtistlist = searchParams.get("isArtistlist") === "true";
@@ -31,17 +62,21 @@ export function Play(props: any) {
         const load = async (type: string, url: string) => {
             const answer: any = await getDataFromApi(url)
             if (answer.result) {
-                setSongList(answer.data[0].tracks)
-                setUrl(url);
-                setType(type);
-                setTitle(answer.data[0].name);
+                const list = answer.data[0].tracks.filter((elem: any) => elem.audio !== "")
+                setPlayListInfo({
+                    songList: list,
+                    title: answer.data[0].name,
+                    type: type,
+                    url: url
+                })
+            } else {
+                setError("Ошибка:" + answer.message);
             }
         }
         if (isArtistlist) {
             load("track", urlArtistSongs);
         }
         if (isPlayList) {
-
             load("track", urlPlayListTrack);
         }
         if (isLoveSongs) {
@@ -51,53 +86,79 @@ export function Play(props: any) {
     }, [])
     useEffect(() => {
 
-    }, [audioUrl, albumImage, nameSong, errorMsg]);
+    }, [songInfo, errorMsg]);
     //
+
     async function prepareLoverSongs() {
         const accessToken = localStorage.getItem("accessToken");
-        const id_user = localStorage.getItem("id_user");
-        const url_playlist = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&user_id=${id_user}
+        const idUser = localStorage.getItem("idUser");
+        const url_playlist = `https://api.jamendo.com/v3.0/users/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&user_id=${idUser}
                 &access_token=${accessToken}`;
-        const favorite = await getDataFromApi(url_playlist);
+        const favorite: DefaultRequest = await getDataFromApi(url_playlist);
         if (favorite.result) {
             if (favorite.data.length === 0) {
                 return <h4 >Список пуст</h4>;
             }
-            let cacheSong: PlayListItemInterface[] = []
+            let cacheSong: any = []
             let title = ''
-            favorite.data.forEach((element: { tracks: PlayListItemInterface[]; name: string; id: string | number }) => {
-                cacheSong = cacheSong.concat(element.tracks)
+            const data: favoriteUserDataInterface[] = favorite.data;
+            data.forEach((element: { tracks: any[]; name: string; id: string | number }) => {
+                cacheSong = cacheSong.concat(element.tracks.filter((elem) => elem.audio !== ""))
                 title += element.name + "/ ";
             });
-            setTitle(title);
-            setSongList(cacheSong);
-            setType("track");
+            setError("");
+            setPlayListInfo({
+                songList: cacheSong,
+                title: title,
+                type: "track",
+                url: ""
+            })
         } else {
             setError("Ошибка:" + favorite.message);
         }
     }
-
+    const setTrackToLover = async (trackId: number) => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (accessToken) {
+            const idUser = localStorage.getItem("idUser");
+            const answer = await postJSON("/setTrackToLover", {
+                clientId: props.init.settings.CLIENT_ID,
+                trackId: trackId,
+                idUser: idUser,
+                accessToken: accessToken
+            })
+        } else {
+            alert("Вы не авторизованны.")
+        }
+    }
     const setSong = (data: any) => {
-        console.log("setSong===> ", data);
-        setAudioUrl(data.audio);
-        setNameSong(data.name);
-        setAlbumImage(data.album_image);
-        setAuthor(data.artist_name)
+        setSongInfo({
+            audioUrl: data.audio,
+            nameSong: data.name,
+            author: data.artist_name,
+            trackId: data.id,
+            albumImage: data.album_image
+        })
     }
     const changeSong = (index: any) => {
-        setSong(songList[index])
+        setSong(playListInfo.songList[index])
     }
-
-    return < div className="conten-react" >
+    return <div className="conten-react" >
         <Auth clientId={props.init.settings.CLIENT_ID} timeBlock={props.init.settings.TIME_TO_BLOCK} />
-        {songList.length === 0 ? <h3>Список пуст</h3> :
-
+        {playListInfo.songList.length === 0 ? <h3>Список пуст</h3> :
             <div className="conten-react__content">
-
-                <PlayList setSong={setSong} list={songList} title={title} type={type} url={url} />
+                <PlayList setSong={setSong} list={playListInfo.songList} title={playListInfo.title} type={playListInfo.type} url={playListInfo.url} />
             </div>}
         {errorMsg === "" ? "" : errorMsg}
-        <AudioPlayer author={author} audioUrl={audioUrl} length={songList.length} albumImage={albumImage} nameSong={nameSong} changeSong={changeSong} />
+        <AudioPlayer
+            author={songInfo.author}
+            audioUrl={songInfo.audioUrl}
+            length={playListInfo.songList.length}
+            trackId={songInfo.trackId}
+            setTrackToLover={setTrackToLover}
+            albumImage={songInfo.albumImage}
+            nameSong={songInfo.nameSong}
+            changeSong={changeSong} />
     </div >
 
 

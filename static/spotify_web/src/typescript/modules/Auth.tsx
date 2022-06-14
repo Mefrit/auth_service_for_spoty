@@ -5,14 +5,32 @@ import { useSearchParams } from "react-router-dom";
 import { postJSON, getCurentUserInfo } from "../lib/query";
 import {
     GetUserInfoInterface,
-
 } from "../interfaces/DefaultInterface";
-export function Auth(props: any) {
-    const [errorMsg, setError] = useState("");
-    const [name, setName] = useState("");
-    const [image, setImage] = useState("");
-    const [searchParams, setSearchParams] = useSearchParams();
 
+export function Auth(props: { clientId: string, timeBlock: number }) {
+    const [authData, setAuthData] = useState({
+        errorMsg: "",
+        name: "",
+        image: ""
+    });
+    const [searchParams, setSearchParams] = useSearchParams();
+    async function setUserInfo(access_token: string) {
+        const userInfo: GetUserInfoInterface = await getCurentUserInfo(access_token);
+        localStorage.setItem("idUser", userInfo.user.id);
+        if (userInfo.result && userInfo.user) {
+            setAuthData({
+                errorMsg: "",
+                name: userInfo.user.dispname,
+                image: userInfo.user.image
+            })
+        } else {
+            setAuthData({
+                errorMsg: userInfo.message ? userInfo.message : "",
+                name: "",
+                image: ""
+            })
+        }
+    }
     useEffect(() => {
         localStorage.removeItem("userInfo");
         const registration = async () => {
@@ -26,22 +44,17 @@ export function Auth(props: any) {
                 if (answer.result && answer.accessToken) {
                     const parsedToken = JSON.parse(answer.accessToken);
                     if (parsedToken.error) {
-                        setError("ERROR =>" + parsedToken.error_description);
+                        setAuthData({
+                            errorMsg: parsedToken.error_description,
+                            name: "",
+                            image: ""
+                        })
                     } else {
                         localStorage.setItem("accessToken", parsedToken.access_token);
                         localStorage.setItem("timeSetAccessToken", new Date().getTime().toString());
-                        const userInfo: GetUserInfoInterface = await getCurentUserInfo(parsedToken.access_token);
-                        if (userInfo.result && userInfo.user) {
-                            setName(userInfo.user.dispname);
-                            setImage(userInfo.user.image);
-                            setError("")
-
-                        } else {
-                            setError(userInfo.message ? userInfo.message + "222222222222" : "(");
-                        }
+                        setUserInfo(parsedToken.access_token);
                     }
                 }
-
             } else {
                 if (localStorage.getItem("accessToken") !== "undefined" && localStorage.getItem("accessToken")) {
                     const timeSetAccessToken = Number(localStorage.getItem("timeSetAccessToken"));
@@ -54,16 +67,7 @@ export function Auth(props: any) {
                     } else {
                         const tokenFromStorage = localStorage.getItem("accessToken");
                         if (tokenFromStorage) {
-
-                            getCurentUserInfo(tokenFromStorage).then((userInfo: GetUserInfoInterface) => {
-                                if (userInfo.result) {
-                                    setError("")
-                                    setName(userInfo.user.dispname);
-                                    setImage(userInfo.user.image);
-                                } else {
-                                    setError("Error: " + userInfo.message);
-                                }
-                            });
+                            setUserInfo(tokenFromStorage);
                         }
                     }
                 }
@@ -72,14 +76,12 @@ export function Auth(props: any) {
         registration();
     })
 
-    useEffect(() => { }, [errorMsg, name, image])
-    const clearStorage = (ev) => {
+    useEffect(() => { }, [authData])
+    const clearStorage = (ev: Event) => {
         ev.preventDefault();
-
         localStorage.removeItem("timeSetAccessToken");
         localStorage.removeItem("accessToken");
-
-        window.location = ev.target.href;
+        window.location = (ev.target as HTMLLinkElement).href;
     }
     function getTemplateForUserInfo(image: string, name: string) {
         return <div className="user-info">
@@ -89,10 +91,10 @@ export function Auth(props: any) {
     }
     return <div className="user-info-content" id="user-info">
         <div className="registration-link" id="registration">
-            {name ? getTemplateForUserInfo(image, name) :
+            {authData.name ? getTemplateForUserInfo(authData.image, authData.name) :
                 <a onClick={clearStorage} href={`https://api.jamendo.com/v3.0/oauth/authorize?client_id=${props.clientId}&redirect_uri=http://localhost:4567/&response_type=code`} >Вход</a>
             }
-            {errorMsg === "" ? "" : <p>{errorMsg}</p>}
+            {authData.errorMsg === "" ? "" : <p>{authData.errorMsg}</p>}
         </div>
     </div>
 }

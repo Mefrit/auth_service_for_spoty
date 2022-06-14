@@ -8,7 +8,7 @@ export interface PlayListItemInterface {
     musicinfo?: { tags: { genres: object[]; instruments: object[] } };
     releasedate?: string;
     creationdate?: string;
-    artistName: string;
+    artist_name: string;
     id?: string;
     image?: string;
     albumImage?: string;

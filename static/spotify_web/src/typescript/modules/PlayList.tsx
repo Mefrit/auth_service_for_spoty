@@ -1,10 +1,15 @@
 import { PlayListItem } from "./PlaylistItem";
 import React from "react";
 import { PlayListItemInterface } from "../interfaces/PlayListInterface";
-export function PlayList(props: any) {
-
-    function renderListItem(list: PlayListItemInterface[]): any {
-        let play_list_item;
+export interface PlayListProps {
+    setSong: (index: object) => void
+    list: PlayListItemInterface[]
+    title: string
+    type: string
+    url: string
+}
+export function PlayList(props: PlayListProps) {
+    function renderListItem(list: PlayListItemInterface[]) {
         if (list.length === 0) {
             return [<h4>Список пуст</h4>];
         }

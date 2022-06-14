@@ -4,5 +4,5 @@ export const settings = {
     SECRET: "6b8f1bb64f106a4f520b3bf98717e06e",
     API_BASE: "https://api.jamendo.com/v3.0/",
     CODE: "4fc6741c3be9f6fb9c13c9be0e8c2f9889e98396",
-    TIME_TO_BLOCK: 500000,
+    TIME_TO_BLOCK: 5000000,
 };
