@@ -12,7 +12,7 @@ export interface AudioPlayerPropsInterface {
     length: number
     nameSong: string
     setTrackToLover: (index: number) => void
-    trackId: string
+    trackId: number
 
 
 }
@@ -196,7 +196,6 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
                     height="16"
                     width="16"
                     viewBox="0 0 16 16"
-
                 >
                     <path
                         d="M15.724 4.22A4.313 4.313 0 0012.192.814a4.269 4.269 0 00-3.622 1.13.837.837 0 01-1.14 0 4.272 4.272 0 00-6.21 5.855l5.916 7.05a1.128 1.128 0 001.727 0l5.916-7.05a4.228 4.228 0 00.945-3.577z"
@@ -222,7 +221,7 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
                     <path d="M11.5 13.614a5.752 5.752 0 000-11.228v1.55a4.252 4.252 0 010 8.127v1.55z"></path>
                 </svg>
             </button>
-            <input className="options__volume" id="play-volume" type="range" min="0" max="1" step="0.01" onChange={(ev: any) => { setVolume(ev.target.value) }} value={volume} />
+            <input className="options__volume" id="play-volume" type="range" min="0" max="1" step="0.01" onChange={(ev) => { setVolume(Number(ev.target.value)) }} value={volume} />
         </div>
     }
     function renderTimer(trackProgress: number) {
@@ -235,7 +234,7 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
                 min="0"
                 max={audioRef.current.duration.toString()}
                 step="1"
-                onChange={(e: any) => onScrub(e.target.value)}
+                onChange={(e) => onScrub(Number(e.target.value))}
                 value={trackProgress}
             />
             <span className="action__time" id="play-time-end">{getTimeFromSecunds(audioRef.current.duration)}</span>
@@ -243,13 +242,10 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
     }
     return <div className="audio-player">
         {renderInfoSong(props)}
-
         <div className="audio-player__interface">
-
             {renderActionButton(turnRandom, isPlaying)}
             {renderTimer(trackProgress)}
         </div>
         {renderVolumeSettings(volume)}
-
     </div >
 }

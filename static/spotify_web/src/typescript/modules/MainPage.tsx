@@ -142,7 +142,7 @@ export function MainPage(props: MainPageProps) {
                 <AudioPlayer
                     audioUrl={tracklist[index].audio}
                     author={tracklist[index].artist_name}
-                    trackId={tracklist[index].id}
+                    trackId={Number(tracklist[index].id)}
                     length={tracklist.length}
                     setTrackToLover={setTrackToLover}
                     albumImage={tracklist[index].album_image}

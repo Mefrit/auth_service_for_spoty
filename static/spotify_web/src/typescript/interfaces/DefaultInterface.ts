@@ -36,3 +36,4 @@ export interface URLInterface {
     mode: string;
     playListId?: string;
 }
+export interface songInPlayList{audio:string,album_image:string,album_name:string,id:number,name:string}

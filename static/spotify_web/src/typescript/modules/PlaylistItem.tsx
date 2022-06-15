@@ -1,7 +1,8 @@
-import { PlayListItemInterface } from "../interfaces/PlayListInterface";
+import { PlayListItemInterface,playListPropsInterface } from "../interfaces/PlayListInterface";
 import React from "react";
 import { Link } from "react-router-dom";
-export function PlayListItem(props: any) {
+import {songInPlayList} from "../interfaces/DefaultInterface"
+export function PlayListItem(props: playListPropsInterface) {
     function getImageHref(item: PlayListItemInterface) {
         let href = "./static/spotify_web/public/images/album.jpg";
         if (item.image) {
@@ -41,22 +42,23 @@ export function PlayListItem(props: any) {
         }
         return description;
     }
-    function getParamsByType(props: any) {
-        let patams: any = {};
-        patams.id = props.item.id;
-        patams.isPlaylist = props.type === "playlist";
-        patams.isArtistlist = props.type === "artist";
-
-        return encodeQueryData(patams);
+    function getParamsByType(props: playListPropsInterface) {
+        const  params:{id:string,isPlaylist:boolean,isArtistlist:boolean } = {
+            id:props.item.id,
+            isPlaylist:props.type === "playlist",
+            isArtistlist:props.type === "artist"
+        };
+    
+        return encodeQueryData(params);
     }
-    function encodeQueryData(data: any) {
+    function encodeQueryData(data: {id:string,isPlaylist:boolean,isArtistlist:boolean } ) {
         const ret = [];
         for (let d in data)
             ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
         return ret.join('&');
     }
 
-    const choseSonglist = (item: any) => {
+    const choseSonglist = (item: songInPlayList) => {
         props.setSong(item)
     }
     return <div className="album-container__song-container">
@@ -75,7 +77,7 @@ export function PlayListItem(props: any) {
         </div>
     </div>
 }
-function ButtonPlay(props: any) {
+function ButtonPlay(props: {type:string,choseSonglist:(item:songInPlayList)=>void}) {
     return <button className={props.type === "track" ? " play-btn" : "play-btn play-btn_album"} onClick={() => { props.choseSonglist(props.item) }}>
         <svg
             className="play-btn__image play-btn__image_album"

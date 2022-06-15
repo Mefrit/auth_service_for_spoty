@@ -4,12 +4,14 @@ import { getDataFromApi } from "./lib/query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { settings } from "./settings";
-import { Auth } from "./modules/auth"
-import React, { useEffect, useState, useRef } from "react"
-import { render } from "@testing-library/react";
+import { Auth } from "./modules/Auth";
+import React, { useEffect, useState } from "react";
+import {postJSON} from "./lib/query";
+import { DefaultRequest,songInPlayList } from "./interfaces/DefaultInterface";
+import {PlayListItemJumendoInterface} from "./interfaces/PlayListInterface"
 export function Search(props: any) {
     const [searchparams, setSearchParams] = useState("Linkin Park");
-    const [tracklist, setTrackLists] = useState([]);
+    const [tracklist, setTrackLists] = useState<PlayListItemJumendoInterface[]>([]);
     const [load, setLoad] = useState(false);
     const [nameSong, setNameSong] = useState("");
     const [author, setAuthor] = useState("");
@@ -24,7 +26,7 @@ export function Search(props: any) {
                 `https://api.jamendo.com/v3.0/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&limit=30&search=` +
                 searchparams.trim();
             setLoad(true)
-            getDataFromApi(url_search).then((answer: any) => {
+            getDataFromApi(url_search).then((answer: DefaultRequest) => {
                 console.log('data', answer);
                 setLoad(false)
                 if (answer.result) {
@@ -34,7 +36,24 @@ export function Search(props: any) {
         }
 
     };
-    const setSong = (data: any) => {
+    const setTrackToLover = async (trackId: number) => {
+        const accessToken = localStorage.getItem("accessToken");
+        if (accessToken) {
+            const idUser = localStorage.getItem("idUser");
+            const answer = await postJSON("/setTrackToLover", {
+                clientId: props.init.settings.CLIENT_ID,
+                trackId: trackId,
+                idUser: idUser,
+                accessToken: accessToken
+            })
+            if(answer.result){
+                alert("Трек успешно добавлен в \"Избранное\"")
+            }
+        } else {
+            alert("Вы не авторизованны.")
+        }
+    }
+    const setSong = (data:songInPlayList ) => {
         console.log("setSong===> ", data);
         setAudioUrl(data.audio);
         setNameSong(data.name);
@@ -42,25 +61,14 @@ export function Search(props: any) {
         setAuthor(data.album_name)
         setTrackId(data.id)
     }
-    function renderTrack(list: any) {
+    function renderTrack(list: PlayListItemJumendoInterface[]) {
         if (list.length === 0) {
             return "Введите параметры поиска"
         }
         return <PlayList setSong={setSong} list={list} title={searchparams} type={"track"} url={""} />
     }
-    //вынести 
-    function getIndexByIdInPlayList(list, id) {
-        let findIndex = 0;
-        list.forEach((elem: any, index: number, arr: any) => {
-            if (elem.id === id) {
-                findIndex = index;
-            }
-        })
-        return findIndex;
-    }
-    const changeSong = (index: any) => {
-        console.log("index===... ", index);
-
+    
+    const changeSong = (index: number) => {
         setAudioUrl(tracklist[index].audio);
         setNameSong(tracklist[index].name);
         setAlbumImage(tracklist[index].album_image);
@@ -82,7 +90,7 @@ export function Search(props: any) {
         {load ? <div className="search_content">Загрузка...</div> : <div id="albums-content" className="search_content">{renderTrack(tracklist)}</div>}
 
 
-        <AudioPlayer author={author} audioUrl={audioUrl} length={tracklist.length} id_track={trackId} albumImage={albumImage} nameSong={nameSong} changeSong={changeSong} />
+        <AudioPlayer setTrackToLover={setTrackToLover} author={author} audioUrl={audioUrl} length={tracklist.length} trackId={Number(trackId)} albumImage={albumImage} nameSong={nameSong} changeSong={changeSong} />
     </div>
 }
 const config = {

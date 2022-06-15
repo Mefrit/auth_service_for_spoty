@@ -127,6 +127,9 @@ export function Play(props: any) {
                 idUser: idUser,
                 accessToken: accessToken
             })
+            if(answer.result){
+                alert("Трек успешно добавлен в \"Избранное\"")
+            }
         } else {
             alert("Вы не авторизованны.")
         }
