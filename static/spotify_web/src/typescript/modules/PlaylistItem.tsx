@@ -1,19 +1,23 @@
-import { PlayListItemInterface,playListPropsInterface } from "../interfaces/PlayListInterface";
+import { playListPropsInterface, PlayListItemJumendoInterface } from "../interfaces/PlayListInterface";
 import React from "react";
 import { Link } from "react-router-dom";
-import {songInPlayList} from "../interfaces/DefaultInterface"
+
 export function PlayListItem(props: playListPropsInterface) {
-    function getImageHref(item: PlayListItemInterface) {
+    function getImageHref(item: PlayListItemJumendoInterface) {
         let href = "./static/spotify_web/public/images/album.jpg";
+
         if (item.image) {
             href = item.image;
         }
-        if (item.albumImage) {
-            href = item.albumImage;
+        if (item.album_image) {
+            href = item.album_image;
+        } else {
+            if (item.albumImage)
+                href = item.albumImage;
         }
         return href;
     }
-    function getTitleItem(item: PlayListItemInterface, type: string) {
+    function getTitleItem(item: PlayListItemJumendoInterface, type: string) {
         let title = "Не известно";
 
         if (item.name) {
@@ -24,7 +28,7 @@ export function PlayListItem(props: playListPropsInterface) {
         }
         return title;
     }
-    function getDescription(item: PlayListItemInterface) {
+    function getDescription(item: PlayListItemJumendoInterface) {
         let description = "";
         if (item.musicinfo) {
             description += "Жанры: " + item.musicinfo.tags.genres.join(" ") + ".";
@@ -43,22 +47,22 @@ export function PlayListItem(props: playListPropsInterface) {
         return description;
     }
     function getParamsByType(props: playListPropsInterface) {
-        const  params:{id:string,isPlaylist:boolean,isArtistlist:boolean } = {
-            id:props.item.id,
-            isPlaylist:props.type === "playlist",
-            isArtistlist:props.type === "artist"
+        const params: { id: number, isPlaylist: boolean, isArtistlist: boolean } = {
+            id: props.item.id,
+            isPlaylist: props.type === "playlist",
+            isArtistlist: props.type === "artist"
         };
-    
+
         return encodeQueryData(params);
     }
-    function encodeQueryData(data: {id:string,isPlaylist:boolean,isArtistlist:boolean } ) {
+    function encodeQueryData(data: { id: number, isPlaylist: boolean, isArtistlist: boolean }) {
         const ret = [];
         for (let d in data)
             ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
         return ret.join('&');
     }
 
-    const choseSonglist = (item: songInPlayList) => {
+    const choseSonglist = (item: PlayListItemJumendoInterface) => {
         props.setSong(item)
     }
     return <div className="album-container__song-container">
@@ -77,7 +81,7 @@ export function PlayListItem(props: playListPropsInterface) {
         </div>
     </div>
 }
-function ButtonPlay(props: {type:string,choseSonglist:(item:songInPlayList)=>void}) {
+function ButtonPlay(props: { type: string, choseSonglist: (item: PlayListItemJumendoInterface) => void }) {
     return <button className={props.type === "track" ? " play-btn" : "play-btn play-btn_album"} onClick={() => { props.choseSonglist(props.item) }}>
         <svg
             className="play-btn__image play-btn__image_album"

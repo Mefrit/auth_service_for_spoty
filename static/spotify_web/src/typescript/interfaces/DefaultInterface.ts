@@ -36,4 +36,24 @@ export interface URLInterface {
     mode: string;
     playListId?: string;
 }
-export interface songInPlayList{audio:string,album_image:string,album_name:string,id:number,name:string}
+export interface songInPlayList {
+    audio: string;
+    album_image: string;
+    album_name: string;
+    id: number;
+    name: string;
+}
+export interface MainPageProps {
+    init: {
+        settings: {
+            API_BASE: string;
+            API_KEY: string;
+            CLIENT_ID: string;
+            CODE: string;
+            SECRET: string;
+            TIME_TO_BLOCK: number;
+        };
+    };
+}
+export interface SearchProps extends MainPageProps {}
+export interface PlayProps extends MainPageProps {}

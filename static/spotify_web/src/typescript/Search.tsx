@@ -6,19 +6,18 @@ import ReactDOM from "react-dom";
 import { settings } from "./settings";
 import { Auth } from "./modules/Auth";
 import React, { useEffect, useState } from "react";
-import {postJSON} from "./lib/query";
-import { DefaultRequest,songInPlayList } from "./interfaces/DefaultInterface";
-import {PlayListItemJumendoInterface} from "./interfaces/PlayListInterface"
-export function Search(props: any) {
-    const [searchparams, setSearchParams] = useState("Linkin Park");
+import { postJSON } from "./lib/query";
+import { DefaultRequest, songInPlayList, SearchProps } from "./interfaces/DefaultInterface";
+import { PlayListItemJumendoInterface, PlayListItemInterface } from "./interfaces/PlayListInterface"
+export function Search(props: SearchProps) {
+    const [searchparams, setSearchParams] = useState("latin");
     const [tracklist, setTrackLists] = useState<PlayListItemJumendoInterface[]>([]);
     const [load, setLoad] = useState(false);
     const [nameSong, setNameSong] = useState("");
     const [author, setAuthor] = useState("");
-    const [albumImage, setAlbumImage] = useState("#");
+    const [albumImage, setAlbumImage] = useState("");
     const [audioUrl, setAudioUrl] = useState("#");
-    const [trackId, setTrackId] = useState(-1)
-    console.log(props)
+    const [trackId, setTrackId] = useState(-1);
     useEffect(() => { }, [tracklist, load, searchparams])
     const startSearch = () => {
         if (searchparams.length > 0) {
@@ -27,7 +26,7 @@ export function Search(props: any) {
                 searchparams.trim();
             setLoad(true)
             getDataFromApi(url_search).then((answer: DefaultRequest) => {
-                console.log('data', answer);
+
                 setLoad(false)
                 if (answer.result) {
                     setTrackLists(answer.data)
@@ -46,15 +45,14 @@ export function Search(props: any) {
                 idUser: idUser,
                 accessToken: accessToken
             })
-            if(answer.result){
+            if (answer.result) {
                 alert("Трек успешно добавлен в \"Избранное\"")
             }
         } else {
             alert("Вы не авторизованны.")
         }
     }
-    const setSong = (data:songInPlayList ) => {
-        console.log("setSong===> ", data);
+    const setSong = (data: PlayListItemJumendoInterface) => {
         setAudioUrl(data.audio);
         setNameSong(data.name);
         setAlbumImage(data.album_image);
@@ -63,11 +61,11 @@ export function Search(props: any) {
     }
     function renderTrack(list: PlayListItemJumendoInterface[]) {
         if (list.length === 0) {
-            return "Введите параметры поиска"
+            return <p>Введите параметры поиска</p>
         }
         return <PlayList setSong={setSong} list={list} title={searchparams} type={"track"} url={""} />
     }
-    
+
     const changeSong = (index: number) => {
         setAudioUrl(tracklist[index].audio);
         setNameSong(tracklist[index].name);
@@ -81,7 +79,7 @@ export function Search(props: any) {
             <div className="search__text-interface">
                 <label >Название песни, автора или жанр
 
-                    <input type="text" id="search-string" onChange={(ev) => { setSearchParams(ev.target.value) }} defaultValue="Linkin Park" className="search__string" placeholder="Введите запрос" />
+                    <input type="text" id="search-string" onChange={(ev) => { setSearchParams(ev.target.value) }} defaultValue="latin" className="search__string" placeholder="Введите запрос" />
                 </label>
             </div>
 

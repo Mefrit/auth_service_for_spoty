@@ -1,16 +1,16 @@
 import { PlayListItem } from "./PlaylistItem";
 import React from "react";
-import { PlayListItemInterface } from "../interfaces/PlayListInterface";
+import { PlayListItemJumendoInterface } from "../interfaces/PlayListInterface";
 import { PlayListProps } from "../interfaces/PlayListInterface";
 
 export function PlayList(props: PlayListProps) {
-    function renderListItem(list: PlayListItemInterface[]) {
+    function renderListItem(list: PlayListItemJumendoInterface[]) {
         if (list.length === 0) {
             return [<h4>Список пуст</h4>];
         }
         return list
             .filter((elem) => elem.audio !== "")
-            .map((elem: PlayListItemInterface, index, arr) => {
+            .map((elem: PlayListItemJumendoInterface, index, arr) => {
                 return <PlayListItem setSong={props.setSong} item={elem} type={props.type} url={props.url} index={index} key={props.url + index} />;
             });
     }

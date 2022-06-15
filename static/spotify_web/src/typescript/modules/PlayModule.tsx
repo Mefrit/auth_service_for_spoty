@@ -8,36 +8,15 @@ import { Auth } from "../modules/Auth"
 
 
 import { AudioPlayer } from "./AudioPlayer";
-import { DefaultRequest } from "../interfaces/DefaultInterface"
-export interface trackDataInterface {
-    creationdate: string
-    id: string
-    name: string
-    shareurl: string
-    shorturl: string
-    user_id: string
-    user_name: string
-    zip: string
-    audio: string
-    artist_name: string
-    album_image: string
-}
-export interface favoriteUserDataInterface {
-    album_id: string
-    avatar: string
-    avatar_type: string
-    creationdate: string
-    dispname: string
-    id: string
-    lang: string
-    name: string
-    tracks: trackDataInterface[]
-}
+import { DefaultRequest, PlayProps } from "../interfaces/DefaultInterface"
+import { PlayListItemJumendoInterface, trackDataInterface, favoriteUserDataInterface } from "../interfaces/PlayListInterface"
 
-export function Play(props: any) {
+
+export function Play(props: PlayProps) {
 
     const [errorMsg, setError] = useState("");
 
+    const [loadState, setLoadState] = useState(true);
     const [playListInfo, setPlayListInfo] = useState({
         songList: [],
         title: "",
@@ -60,15 +39,20 @@ export function Play(props: any) {
         const urlPlayListTrack = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&limit=20&id=${id}`;
         const urlArtistSongs = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&order=track_name_desc&id=${id}`;
         const load = async (type: string, url: string) => {
-            const answer: any = await getDataFromApi(url)
+
+            const answer: DefaultRequest = await getDataFromApi(url)
+            setLoadState(false)
             if (answer.result) {
-                const list = answer.data[0].tracks.filter((elem: any) => elem.audio !== "")
-                setPlayListInfo({
-                    songList: list,
-                    title: answer.data[0].name,
-                    type: type,
-                    url: url
-                })
+                if (answer.data.length > 0) {
+                    const list = answer.data[0].tracks.filter((elem: trackDataInterface) => elem.audio !== "")
+                    setPlayListInfo({
+                        songList: list,
+                        title: answer.data[0].name,
+                        type: type,
+                        url: url
+                    })
+                }
+
             } else {
                 setError("Ошибка:" + answer.message);
             }
@@ -99,10 +83,10 @@ export function Play(props: any) {
             if (favorite.data.length === 0) {
                 return <h4 >Список пуст</h4>;
             }
-            let cacheSong: any = []
+            let cacheSong: trackDataInterface[] = []
             let title = ''
             const data: favoriteUserDataInterface[] = favorite.data;
-            data.forEach((element: { tracks: any[]; name: string; id: string | number }) => {
+            data.forEach((element: { tracks: trackDataInterface[]; name: string; id: string | number }) => {
                 cacheSong = cacheSong.concat(element.tracks.filter((elem) => elem.audio !== ""))
                 title += element.name + "/ ";
             });
@@ -127,14 +111,14 @@ export function Play(props: any) {
                 idUser: idUser,
                 accessToken: accessToken
             })
-            if(answer.result){
+            if (answer.result) {
                 alert("Трек успешно добавлен в \"Избранное\"")
             }
         } else {
             alert("Вы не авторизованны.")
         }
     }
-    const setSong = (data: any) => {
+    const setSong = (data: PlayListItemJumendoInterface) => {
         setSongInfo({
             audioUrl: data.audio,
             nameSong: data.name,
@@ -143,15 +127,17 @@ export function Play(props: any) {
             albumImage: data.album_image
         })
     }
-    const changeSong = (index: any) => {
+    const changeSong = (index: number) => {
         setSong(playListInfo.songList[index])
     }
     return <div className="conten-react" >
         <Auth clientId={props.init.settings.CLIENT_ID} timeBlock={props.init.settings.TIME_TO_BLOCK} />
-        {playListInfo.songList.length === 0 ? <h3>Список пуст</h3> :
+
+        {playListInfo.songList.length === 0 ? <h3>Список пуст {loadState ? "(Загрузка...)" : ""}</h3> :
             <div className="conten-react__content">
                 <PlayList setSong={setSong} list={playListInfo.songList} title={playListInfo.title} type={playListInfo.type} url={playListInfo.url} />
             </div>}
+
         {errorMsg === "" ? "" : errorMsg}
         <AudioPlayer
             author={songInfo.author}

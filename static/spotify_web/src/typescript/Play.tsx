@@ -9,7 +9,6 @@ import { MainPage } from "./App"
 
 import { Play } from "./modules/PlayModule"
 const root = ReactDOM.createRoot(document.getElementById("root"));
-console.log("PLAY", root)
 const config = {
 
     settings: settings

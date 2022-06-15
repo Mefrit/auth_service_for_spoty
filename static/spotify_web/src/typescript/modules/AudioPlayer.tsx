@@ -1,7 +1,4 @@
-// import { SongInfoPlayer } from "./SongInfoPlayer";
-import { SettingsInterface, DefaultRequest, SongData, DefaultJumendoRequest } from "../interfaces/DefaultInterface";
-import { ApiInterface } from "../interfaces/ApiInterface";
-import { AudioPlayerInterface } from "../interfaces/AudioPlayerInterface";
+
 import React, { useEffect, useState, useRef } from "react"
 
 export interface AudioPlayerPropsInterface {
@@ -13,11 +10,8 @@ export interface AudioPlayerPropsInterface {
     nameSong: string
     setTrackToLover: (index: number) => void
     trackId: number
-
-
 }
 export function AudioPlayer(props: AudioPlayerPropsInterface) {
-
     const [trackIndex, setTrackIndex] = useState(0);
     const [trackProgress, setTrackProgress] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -25,10 +19,8 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
     const intervalRef = useRef();
     const isReady = useRef(false);
     const [turnRandom, setTurnRandomMode] = useState(false);
-
     const [volume, setVolume] = useState(0.5)
     useEffect(() => {
-
     })
     const toPrevTrack = () => {
 
@@ -52,7 +44,7 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
         return ("0" + full_minutes).slice(-2) + ":" + ("0" + secunds).slice(-2);
     }
     const toNextTrack = () => {
-        console.log(props)
+
         let index_tmp = turnRandom ? getRandomInt(0, props.length - 1) : trackIndex + 1;
         if (index_tmp >= props.length) {
             index_tmp = 0;
@@ -108,13 +100,15 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
         }, 1000);
     }
     const addToLoverPlaylist = () => {
-
-        props.setTrackToLover(Number(props.trackId));
+        if (props.trackId !== -1)
+            props.setTrackToLover(Number(props.trackId));
+        else
+            alert("Вы не выбрали трэк")
     }
     function renderInfoSong(props: AudioPlayerPropsInterface) {
         return <div id="song-info-player">
             <div className="song">
-                {props.albumImage != "#" ? <img src={props.albumImage} alt="Logo" className="song__icon" title="Logo" /> : ""}
+                {props.albumImage !== "" ? <img src={props.albumImage} alt="Logo" className="song__icon" title="Logo" /> : ""}
                 <div className="song__info">
 
                     <div className='song__description' >
@@ -151,8 +145,8 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
                     </svg>
                 }
             </button>
-            <button className="action__back" id="play-back" onClick={toPrevTrack}>
-                <svg role="img" height="16" width="16" viewBox="0 0 16 16">
+            <button className="action__back action__forward" id="play-back" onClick={toPrevTrack}>
+                <svg role="img" height="16" width="16" className="play-btn__image" viewBox="0 0 16 16">
                     <path
                         d="M3.3 1a.7.7 0 01.7.7v5.15l9.95-5.744a.7.7 0 011.05.606v12.575a.7.7 0 01-1.05.607L4 9.149V14.3a.7.7 0 01-.7.7H1.7a.7.7 0 01-.7-.7V1.7a.7.7 0 01.7-.7h1.6z"
                     ></path>
