@@ -63,7 +63,6 @@ export function Auth(props: { clientId: string, timeBlock: number }) {
                     if (curentDate.getTime() - dateSetToken.getTime() > props.timeBlock) {
                         localStorage.removeItem("timeSetAccessToken");
                         localStorage.removeItem("accessToken");
-                        localStorage.removeItem("userInfo");
                     } else {
                         const tokenFromStorage = localStorage.getItem("accessToken");
                         if (tokenFromStorage) {
