@@ -36,11 +36,10 @@ export function PlayListItem(props: playListPropsInterface) {
         }
         if (item.releasedate) {
             description += "\nДата релиза " + item.releasedate + ".";
-        } else {
-            if (item.creationdate) {
-                description += "\nДата релиза " + item.creationdate + ".";
-            }
+        } else if (item.creationdate) {
+            description += "\nДата релиза " + item.creationdate + ".";
         }
+
         if (item.artist_name) {
             description += "\n " + item.artist_name + ".";
         }
@@ -57,8 +56,8 @@ export function PlayListItem(props: playListPropsInterface) {
     }
     function encodeQueryData(data: { id: number, isPlaylist: boolean, isArtistlist: boolean }) {
         const ret = [];
-        for (let d in data)
-            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+        for (let key in data)
+            ret.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
         return ret.join('&');
     }
 

@@ -58,20 +58,6 @@
                 </ul>
 
                 <ul class="menu__actions">
-                    <!-- <li class="menu__action menu__action-playlist">
-                        <svg
-                            role="img"
-                            height="12"
-                            width="12"
-                            viewBox="0 0 16 16"
-                            class="menu__image menu__image_playlist"
-                        >
-                            <path
-                                d="M15.25 8a.75.75 0 01-.75.75H8.75v5.75a.75.75 0 01-1.5 0V8.75H1.5a.75.75 0 010-1.5h5.75V1.5a.75.75 0 011.5 0v5.75h5.75a.75.75 0 01.75.75z"
-                            ></path>
-                        </svg>
-                        <a href="#" class="menu__link">Создать плейлист</a>
-                    </li> -->
                     <li class="menu__action menu__action-playlist">
                         <svg
                             role="img"
@@ -89,31 +75,18 @@
                 </ul>
             </div>
             <div class="content" id="root"></div>
-            <!-- <div class="content" id="albums-content">
-                <div class="user-info-content" id="user-info">
-                    <div class="registration-link" id="registration">
-                        <a href="#" id="registrationLink">Вход</a>
-                    </div>
-                </div>
-            </div> -->
         </div>
 
         <audio id="audio-player" style="opacity: 0" controls src="#">
             Your browser does not support the audio element.
         </audio>
     </body>
-    <!--static', filename='./spotify_web/public/style/css/main.css') -->
-
     <script>
         var exports = {};
     </script>
-    <!-- <script
-        src=" {{ url_for('static', filename='./spotify_web/public/script/js/App.js') }} "
-        type="text/javascript"
-    ></script> -->
     <script
         src="{{ url_for('static', filename='./spotify_web/node_modules/requirejs/require.js') }}"
-        data-main="{{ url_for('static', filename='./spotify_web/public/script/js/Play.js') }}"
+        data-main="{{ url_for('static', filename='./spotify_web/public/script/js/index.js') }}"
     ></script>
     <script
         src=" {{ url_for('static', filename='./spotify_web/src/requireJSconfig/requireConfig.js') }} "

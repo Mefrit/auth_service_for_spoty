@@ -4,14 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getDataFromApi, postJSON } from "../lib/query";
 import { Auth } from "../modules/Auth"
-
-
-
 import { AudioPlayer } from "./AudioPlayer";
 import { DefaultRequest, PlayProps } from "../interfaces/DefaultInterface"
 import { PlayListItemJumendoInterface, trackDataInterface, favoriteUserDataInterface } from "../interfaces/PlayListInterface"
-
-
+import { DEFAULT_AUDIO_URL } from "../lib/const"
 export function Play(props: PlayProps) {
 
     const [errorMsg, setError] = useState("");
@@ -25,7 +21,7 @@ export function Play(props: PlayProps) {
     })
     const [searchParams, setSearchParams] = useSearchParams();
     const [songInfo, setSongInfo] = useState({
-        audioUrl: "#",
+        audioUrl: DEFAULT_AUDIO_URL,
         nameSong: "",
         author: "",
         trackId: -1,
@@ -39,7 +35,6 @@ export function Play(props: PlayProps) {
         const urlPlayListTrack = `https://api.jamendo.com/v3.0/playlists/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&limit=20&id=${id}`;
         const urlArtistSongs = `https://api.jamendo.com/v3.0/artists/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&order=track_name_desc&id=${id}`;
         const load = async (type: string, url: string) => {
-
             const answer: DefaultRequest = await getDataFromApi(url)
             setLoadState(false)
             if (answer.result) {
@@ -52,7 +47,6 @@ export function Play(props: PlayProps) {
                         url: url
                     })
                 }
-
             } else {
                 setError("Ошибка:" + answer.message);
             }
@@ -69,7 +63,9 @@ export function Play(props: PlayProps) {
         // 
     }, [])
     useEffect(() => {
-
+        if (errorMsg === "No Error") {
+            setError("")
+        }
     }, [songInfo, errorMsg]);
     //
 
@@ -132,7 +128,7 @@ export function Play(props: PlayProps) {
     }
     return <div className="conten-react" >
         <Auth clientId={props.init.settings.CLIENT_ID} timeBlock={props.init.settings.TIME_TO_BLOCK} />
-
+        {searchParams.get("mode") === "lovesongs" ? <h3 className="playlist__title_lover">Избранное</h3> : ""}
         {playListInfo.songList.length === 0 ? <h3>Список пуст {loadState ? "(Загрузка...)" : ""}</h3> :
             <div className="conten-react__content">
                 <PlayList setSong={setSong} list={playListInfo.songList} title={playListInfo.title} type={playListInfo.type} url={playListInfo.url} />

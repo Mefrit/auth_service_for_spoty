@@ -20,8 +20,7 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
     const isReady = useRef(false);
     const [turnRandom, setTurnRandomMode] = useState(false);
     const [volume, setVolume] = useState(0.5)
-    useEffect(() => {
-    })
+
     const toPrevTrack = () => {
 
         let index_tmp = trackIndex - 1;

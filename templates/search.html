@@ -73,7 +73,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="content" id="rootsearch"></div>
+            <div class="content" id="root"></div>
         </div>
 
         <div class="audio-player">
@@ -165,7 +165,7 @@
     ></script> -->
     <script
         src="{{ url_for('static', filename='./spotify_web/node_modules/requirejs/require.js') }}"
-        data-main="{{ url_for('static', filename='./spotify_web/public/script/js/Search.js') }}"
+        data-main="{{ url_for('static', filename='./spotify_web/public/script/js/index.js') }}"
     ></script>
     <script
         src=" {{ url_for('static', filename='./spotify_web/src/requireJSconfig/requireConfig.js') }} "

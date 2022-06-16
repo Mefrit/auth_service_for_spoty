@@ -14,7 +14,7 @@ export function PlayList(props: PlayListProps) {
                 return <PlayListItem setSong={props.setSong} item={elem} type={props.type} url={props.url} index={index} key={props.url + index} />;
             });
     }
-    return <div className="playlist">
+    return <div className={props.type === "track" ? "playlist playlist-track" : "playlist"}>
         <h3 className="album-container__title">{props.title}</h3>
         <section className={
             props.type === "track" ? "album-container album-container_track" : "album-container"
