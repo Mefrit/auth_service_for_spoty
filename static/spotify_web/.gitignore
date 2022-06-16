@@ -6,3 +6,4 @@
 # production
 /public/script/js/**/*.js
 /node_modules
+/public/script/

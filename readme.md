@@ -1,8 +1,8 @@
 # start server for authentication
 
-git chekout M.E.Fokin/js-app
+git chekout M.E.Fokin/react-app
 pip install Flask
-pip install request
+pip install requests
 
 python app.py
 application -> localhost:4567
