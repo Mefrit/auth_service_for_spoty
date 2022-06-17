@@ -5,5 +5,6 @@
 
 # production
 /public/script/js/**/*.js
+/public/script/js/**/*.map
 /node_modules
 /public/script/

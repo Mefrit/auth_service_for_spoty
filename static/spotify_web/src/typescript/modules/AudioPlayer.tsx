@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from "react"
-
+import {DEFAULT_TRACK_ID, DEFAULT_VOLUME_VALUE,TIME_TO_LOAD_TRACK} from "../lib/const"
 export interface AudioPlayerPropsInterface {
     albumImage: string
     audioUrl: string
@@ -19,16 +19,16 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
     const intervalRef = useRef();
     const isReady = useRef(false);
     const [turnRandom, setTurnRandomMode] = useState(false);
-    const [volume, setVolume] = useState(0.5)
+    const [volume, setVolume] = useState(DEFAULT_VOLUME_VALUE)
 
     const toPrevTrack = () => {
 
-        let index_tmp = trackIndex - 1;
-        if (index_tmp < 0) {
-            index_tmp = props.length - 1;
+        let indexPref = trackIndex - 1;
+        if (indexPref < 0) {
+            indexPref = props.length - 1;
         }
-        props.changeSong(index_tmp)
-        setTrackIndex(index_tmp)
+        props.changeSong(indexPref)
+        setTrackIndex(indexPref)
     }
     function getRandomInt(min: number, max: number) {
         return Math.floor(Math.random() * (max - min)) + min;
@@ -44,12 +44,12 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
     }
     const toNextTrack = () => {
 
-        let index_tmp = turnRandom ? getRandomInt(0, props.length - 1) : trackIndex + 1;
-        if (index_tmp >= props.length) {
-            index_tmp = 0;
+        let indexPref = turnRandom ? getRandomInt(0, props.length - 1) : trackIndex + 1;
+        if (indexPref >= props.length) {
+            indexPref = 0;
         }
-        setTrackIndex(index_tmp)
-        props.changeSong(index_tmp)
+        setTrackIndex(indexPref)
+        props.changeSong(indexPref)
     }
     useEffect(() => {
         return () => {
@@ -96,10 +96,10 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
             } else {
                 setTrackProgress(audioRef.current.currentTime);
             }
-        }, 1000);
+        }, TIME_TO_LOAD_TRACK);
     }
     const addToLoverPlaylist = () => {
-        if (props.trackId !== -1)
+        if (props.trackId !== DEFAULT_TRACK_ID)
             props.setTrackToLover(Number(props.trackId));
         else
             alert("Вы не выбрали трэк")

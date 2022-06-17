@@ -6,7 +6,7 @@ import { PlayListProps } from "../interfaces/PlayListInterface";
 export function PlayList(props: PlayListProps) {
     function renderListItem(list: PlayListItemJumendoInterface[]) {
         if (list.length === 0) {
-            return [<h4>Список пуст</h4>];
+            return [<h4 className="playlist__empty_list">Список пуст</h4>];
         }
         return list
             .filter((elem) => elem.audio !== "")

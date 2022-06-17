@@ -13,7 +13,7 @@ export function Auth(props: { clientId: string, timeBlock: number }) {
         name: "",
         image: ""
     });
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     async function setUserInfo(access_token: string) {
         const userInfo: GetUserInfoInterface = await getCurentUserInfo(access_token);
         localStorage.setItem("idUser", userInfo.user.id);
@@ -39,7 +39,7 @@ export function Auth(props: { clientId: string, timeBlock: number }) {
                 localStorage.removeItem("timeSetAccessToken");
                 localStorage.removeItem("accessToken");
                 const answer = await postJSON("/", {
-                    code: code,
+                    code
                 })
                 if (answer.result && answer.accessToken) {
                     const parsedToken = JSON.parse(answer.accessToken);
@@ -73,9 +73,8 @@ export function Auth(props: { clientId: string, timeBlock: number }) {
             }
         }
         registration();
-    })
+    },[])
 
-    useEffect(() => { }, [authData])
     const clearStorage = (ev: Event) => {
         ev.preventDefault();
         localStorage.removeItem("timeSetAccessToken");

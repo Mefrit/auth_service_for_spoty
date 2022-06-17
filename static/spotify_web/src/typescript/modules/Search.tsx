@@ -1,13 +1,13 @@
 import { PlayList } from "./PlayList"
 import { AudioPlayer } from "./AudioPlayer"
 import { getDataFromApi } from "../lib/query";
-
 import { Auth } from "./Auth";
 import React, { useEffect, useState } from "react";
 import { postJSON } from "../lib/query";
 import { DefaultRequest, SearchProps } from "../interfaces/DefaultInterface";
 import { PlayListItemJumendoInterface } from "../interfaces/PlayListInterface"
-import { DEFAULT_AUDIO_URL, DEFAULT_SEARCH_PARAM } from "../lib/const"
+import { DEFAULT_AUDIO_URL, DEFAULT_SEARCH_PARAM, DEFAULT_TRACK_ID} from "../lib/const";
+
 export function Search(props: SearchProps) {
     const [searchparams, setSearchParams] = useState(DEFAULT_SEARCH_PARAM);
     const [tracklist, setTrackLists] = useState<PlayListItemJumendoInterface[]>([]);
@@ -16,23 +16,26 @@ export function Search(props: SearchProps) {
     const [author, setAuthor] = useState("");
     const [albumImage, setAlbumImage] = useState("");
     const [audioUrl, setAudioUrl] = useState(DEFAULT_AUDIO_URL);
-    const [trackId, setTrackId] = useState(-1);
-    useEffect(() => { }, [tracklist, load, searchparams])
+    const [trackId, setTrackId] = useState(DEFAULT_TRACK_ID);
+    const [message, setMessage] = useState("");
+    useEffect(() => { 
+        setMessage("");
+    }, [tracklist, load, searchparams])
     const startSearch = () => {
         if (searchparams.length > 0) {
-            const url_search =
+            const urlSearch =
                 `https://api.jamendo.com/v3.0/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&limit=30&search=` +
                 searchparams.trim();
             setLoad(true)
-            getDataFromApi(url_search).then((answer: DefaultRequest) => {
-
+            getDataFromApi(urlSearch).then((answer: DefaultRequest) => {
                 setLoad(false)
                 if (answer.result) {
                     setTrackLists(answer.data)
+                } else{
+                    setMessage(answer.message)
                 }
             });
         }
-
     };
     const setTrackToLover = async (trackId: number) => {
         const accessToken = localStorage.getItem("accessToken");
@@ -40,9 +43,9 @@ export function Search(props: SearchProps) {
             const idUser = localStorage.getItem("idUser");
             const answer = await postJSON("/setTrackToLover", {
                 clientId: props.init.settings.CLIENT_ID,
-                trackId: trackId,
-                idUser: idUser,
-                accessToken: accessToken
+                trackId,
+                idUser,
+                accessToken
             })
             if (answer.result) {
                 alert("Трек успешно добавлен в \"Избранное\"")
@@ -62,7 +65,7 @@ export function Search(props: SearchProps) {
         if (list.length === 0) {
             return <p>Введите параметры поиска</p>
         }
-        return <PlayList setSong={setSong} list={list} title={searchparams} type={"track"} url={""} />
+        return <PlayList setSong={setSong} list={list} title={searchparams} type="track" url="" />
     }
 
     const changeSong = (index: number) => {
@@ -79,9 +82,9 @@ export function Search(props: SearchProps) {
                     <input type="text" id="search-string" onChange={(ev) => { setSearchParams(ev.target.value) }} defaultValue={DEFAULT_SEARCH_PARAM} className="search__string" placeholder="Введите запрос" />
                 </label>
             </div>
-
-            <input type="button" className="search__action" id="search-btn" onClick={() => { startSearch() }} value="Найти" />
+            <input type="button" className="search__action" id="search-btn" onClick={startSearch} value="Найти" />
         </div>
+        {message !== ""?<h5>{message}</h5>:""}
         {load ? <div className="search_content">Загрузка...</div> : <div id="albums-content" className="search_content">{renderTrack(tracklist)}</div>}
         <AudioPlayer setTrackToLover={setTrackToLover} author={author} audioUrl={audioUrl} length={tracklist.length} trackId={Number(trackId)} albumImage={albumImage} nameSong={nameSong} changeSong={changeSong} />
     </div>

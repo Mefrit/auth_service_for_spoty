@@ -41,8 +41,8 @@ export function getParams(url = window.location) {
     let params: {
         [key: string]: string;
     } = {};
-    const url_str = url.toString();
-    new URL(url_str).searchParams.forEach(function (val: string, key: string) {
+    const urlStr = url.toString();
+    new URL(urlStr).searchParams.forEach(function (val: string, key: string) {
         params[key] = val; // Пушим пары ключ / значение (key / value) в объект
     });
     return params;
