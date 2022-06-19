@@ -1,40 +1,53 @@
 import { DefaultRequest, DefaultJumendoRequest, GetUserInfoInterface } from "../interfaces/DefaultInterface";
+
 export function postJSON(
     url: string,
     args: unknown
 ): Promise<{ accessToken?: string; result?: boolean; message?: unknown }> {
-    return new Promise((resolve, reject) => {
-        try {
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify(args),
-            }).then((data) => {
-                try {
-                    const parsed = data.json();
-                    resolve(parsed);
-                } catch (err: unknown) {
-                    resolve({ result: false, message: err });
-                }
+    return new Promise(async (resolve, reject) => {
+        function getData() {
+            return new Promise((resolve, reject) => {
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json;charset=utf-8",
+                    },
+                    body: JSON.stringify(args),
+                }).then(async (data) => {
+                    function parseJson() {
+                        const parsed = data.json();
+                        return parsed;
+                    }
+
+                    resolve(await errorDecorator(parseJson));
+                });
             });
-        } catch (e: unknown) {
-            alert("ERROR " + e);
         }
+        resolve(errorDecorator(getData));
     });
 }
-
+async function errorDecorator(f: any) {
+    try {
+        return await f();
+    } catch (error: unknown) {
+        return { result: false, message: error };
+    }
+}
 export async function getJSON(url: string): Promise<DefaultJumendoRequest> {
     return new Promise((resolve, reject) => {
-        try {
-            return fetch(url).then((data) => {
-                const parsed = data.json();
-                resolve(parsed);
+        function getData() {
+            return new Promise((resolve, reject) => {
+                fetch(url).then(async (data) => {
+                    function parseJson() {
+                        const parsed = data.json();
+                        return parsed;
+                    }
+
+                    resolve(await errorDecorator(parseJson));
+                });
             });
-        } catch (e: unknown) {
-            alert("ERROR " + e);
         }
+        resolve(errorDecorator(getData));
     });
 }
 export function getParams(url = window.location) {
