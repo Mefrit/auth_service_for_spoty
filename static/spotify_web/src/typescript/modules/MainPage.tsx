@@ -66,7 +66,7 @@ export function MainPage(props: MainPageProps) {
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
             const idUser = localStorage.getItem("idUser");
-      
+
             const answer = await postJSON("/setTrackToLover", {
                 clientId: props.init.settings.CLIENT_ID,
                 trackId,
@@ -75,7 +75,7 @@ export function MainPage(props: MainPageProps) {
             })
             if (answer.result) {
                 alert("Трек добавлен в избранное.");
-            } 
+            }
         } else {
             alert("Вы не авторизованны.")
         }
@@ -93,7 +93,7 @@ export function MainPage(props: MainPageProps) {
     }
     return <div>
         <Auth clientId={props.init.settings.CLIENT_ID} timeBlock={props.init.settings.TIME_TO_BLOCK} />
-      
+
         <div className="conten-react__content"> {renderContent(songlist)} </div>
         {
             tracklist[index] ?
