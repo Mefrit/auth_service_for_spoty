@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from "react"
-import {DEFAULT_TRACK_ID, DEFAULT_VOLUME_VALUE,TIME_TO_LOAD_TRACK} from "../lib/const"
+import { DEFAULT_TRACK_ID, DEFAULT_VOLUME_VALUE, TIME_TO_LOAD_TRACK } from "../lib/const"
 export interface AudioPlayerPropsInterface {
     albumImage: string
     audioUrl: string
@@ -22,14 +22,29 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
     const [volume, setVolume] = useState(DEFAULT_VOLUME_VALUE)
 
     const toPrevTrack = () => {
-
-        let indexPref = trackIndex - 1;
-        if (indexPref < 0) {
-            indexPref = props.length - 1;
+        function getNewTrackIndex() {
+            let indexPref = trackIndex - 1;
+            if (indexPref < 0) {
+                indexPref = props.length - 1;
+            }
         }
-        props.changeSong(indexPref)
-        setTrackIndex(indexPref)
+        updatePositionApp(getNewTrackIndex)
     }
+    const toNextTrack = () => {
+        function getNewTrackIndex() {
+            let indexPref = turnRandom ? getRandomInt(0, props.length - 1) : trackIndex + 1;
+            if (indexPref >= props.length) {
+                indexPref = 0;
+            }
+        }
+        updatePositionApp(getNewTrackIndex)
+    }
+    const updatePositionApp = (f: any) => {
+        const value = f();
+        setTrackIndex(value)
+        props.changeSong(value)
+    }
+
     function getRandomInt(min: number, max: number) {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -42,15 +57,7 @@ export function AudioPlayer(props: AudioPlayerPropsInterface) {
         const secunds = Math.abs(Math.round(sec - full_minutes * 60));
         return ("0" + full_minutes).slice(-2) + ":" + ("0" + secunds).slice(-2);
     }
-    const toNextTrack = () => {
 
-        let indexPref = turnRandom ? getRandomInt(0, props.length - 1) : trackIndex + 1;
-        if (indexPref >= props.length) {
-            indexPref = 0;
-        }
-        setTrackIndex(indexPref)
-        props.changeSong(indexPref)
-    }
     useEffect(() => {
         return () => {
             audioRef.current.pause();

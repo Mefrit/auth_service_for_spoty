@@ -15,21 +15,22 @@ export function Auth(props: { clientId: string, timeBlock: number }) {
     });
     const [searchParams] = useSearchParams();
     async function setUserInfo(access_token: string) {
-        const userInfo: GetUserInfoInterface = await getCurentUserInfo(access_token);
-        localStorage.setItem("idUser", userInfo.user.id);
-        if (userInfo.result && userInfo.user) {
-            setAuthData({
-                errorMsg: "",
-                name: userInfo.user.dispname,
-                image: userInfo.user.image
-            })
-        } else {
-            setAuthData({
-                errorMsg: userInfo.message ? userInfo.message : "",
-                name: "",
-                image: ""
+        async function getData(): Promise<{
+            errorMsg: string;
+            name: string;
+            image: string;
+        }> {
+            const userInfo: GetUserInfoInterface = await getCurentUserInfo(access_token);
+            localStorage.setItem("idUser", userInfo.user.id);
+            const valid = userInfo.result && userInfo.user;
+            const errorMessage = "Не удалось получить данные о пользователе";
+            return ({
+                errorMsg: valid ? userInfo.message ? userInfo.message : errorMessage : '',
+                name: valid ? userInfo.user.dispname : "",
+                image: valid ? userInfo.user.image : ""
             })
         }
+        setAuthData(await getData())
     }
     useEffect(() => {
         localStorage.removeItem("userInfo");
@@ -73,7 +74,7 @@ export function Auth(props: { clientId: string, timeBlock: number }) {
             }
         }
         registration();
-    },[])
+    }, [])
 
     const clearStorage = (ev: Event) => {
         ev.preventDefault();

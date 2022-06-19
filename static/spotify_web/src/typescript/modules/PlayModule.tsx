@@ -7,7 +7,7 @@ import { Auth } from "../modules/Auth";
 import { AudioPlayer } from "./AudioPlayer";
 import { DefaultRequest, PlayProps } from "../interfaces/DefaultInterface";
 import { PlayListItemJumendoInterface, trackDataInterface, favoriteUserDataInterface } from "../interfaces/PlayListInterface";
-import { DEFAULT_AUDIO_URL,DEFAULT_TRACK_ID } from "../lib/const";
+import { DEFAULT_AUDIO_URL, DEFAULT_TRACK_ID } from "../lib/const";
 
 export function Play(props: PlayProps) {
     const [errorMsg, setError] = useState("");
@@ -73,7 +73,6 @@ export function Play(props: PlayProps) {
                 &access_token=${accessToken}&limit=100`;
         const favorite: DefaultRequest = await getDataFromApi(urlPlaylist);
         if (favorite.result) {
-            console.log("favorite",favorite)
             if (favorite.data.length === 0) {
                 return <h4 className="playlist__empty_list" >Список пуст</h4>;
             }
@@ -99,14 +98,14 @@ export function Play(props: PlayProps) {
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
             const idUser = localStorage.getItem("idUser");
-           
+
             const answer = await postJSON("/setTrackToLover", {
                 clientId: props.init.settings.CLIENT_ID,
                 trackId,
                 idUser,
                 accessToken
             })
-          
+
             if (answer.result) {
                 alert("Трек успешно добавлен в \"Избранное\"")
             }
@@ -128,14 +127,14 @@ export function Play(props: PlayProps) {
     }
     return <div className="conten-react" >
         <Auth clientId={props.init.settings.CLIENT_ID} timeBlock={props.init.settings.TIME_TO_BLOCK} />
-        {searchParams.get("mode") === "lovesongs" ? <div> <h3 className="playlist__title_lover">Избранное </h3> </div>: ""}
+        {searchParams.get("mode") === "lovesongs" ? <div> <h3 className="playlist__title_lover">Избранное </h3> </div> : ""}
         {playListInfo.songList.length === 0 ? <h3 className="playlist__empty_list">Список пуст {loadState ? "(Загрузка...)" : ""}</h3> :
             <div className="conten-react__content">
                 <PlayList setSong={setSong} list={playListInfo.songList} title={playListInfo.title} type={playListInfo.type} url={playListInfo.url} />
             </div>}
 
         {errorMsg === "" ? "" : errorMsg}
-        {searchParams.get("mode") === "lovesongs" ?  <p className="playlist__description_lover_song">Некоторые треки могут быть не доступны через API, для доступа к ним откройте сайт <a href="https://www.jamendo.com/start" className="playlist__link">Jumendo Music</a>.</p> :""}
+        {searchParams.get("mode") === "lovesongs" ? <p className="playlist__description_lover_song">Некоторые треки могут быть не доступны через API, для доступа к ним откройте сайт <a href="https://www.jamendo.com/start" className="playlist__link">Jumendo Music</a>.</p> : ""}
         <AudioPlayer
             author={songInfo.author}
             audioUrl={songInfo.audioUrl}
