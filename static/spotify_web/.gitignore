@@ -4,7 +4,7 @@
 **/*.css
 
 # production
-/public/script/js/**/*.js
-/public/script/js/**/*.map
+/public/script/**/*.js
+/public/script/**/*.map
 /node_modules
 /public/script/
