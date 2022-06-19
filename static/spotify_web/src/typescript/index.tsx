@@ -1,13 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import './style/css/main.css';
-// import App from './typescript/App';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-//
-
-//
 import { Play } from "./modules/PlayModule"
-
 import { Search } from "./modules/Search"
 import { MainPage } from "./modules/MainPage"
 import { settings } from "./settings";
