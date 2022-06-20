@@ -24,8 +24,9 @@ export function Auth(props: { clientId: string, timeBlock: number }) {
             localStorage.setItem("idUser", userInfo.user.id);
             const valid = userInfo.result && userInfo.user;
             const errorMessage = "Не удалось получить данные о пользователе";
+            console.log(userInfo, "!!!!!!!", valid)
             return ({
-                errorMsg: valid ? userInfo.message ? userInfo.message : errorMessage : '',
+                errorMsg: valid ? '' : userInfo.message ? userInfo.message : errorMessage,
                 name: valid ? userInfo.user.dispname : "",
                 image: valid ? userInfo.user.image : ""
             })

@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { postJSON } from "../lib/query";
 import { DefaultRequest, SearchProps } from "../interfaces/DefaultInterface";
 import { PlayListItemJumendoInterface } from "../interfaces/PlayListInterface"
-import { DEFAULT_AUDIO_URL, DEFAULT_SEARCH_PARAM, DEFAULT_TRACK_ID} from "../lib/const";
+import { DEFAULT_AUDIO_URL, DEFAULT_SEARCH_PARAM, DEFAULT_TRACK_ID } from "../lib/const";
 
 export function Search(props: SearchProps) {
     const [searchparams, setSearchParams] = useState(DEFAULT_SEARCH_PARAM);
@@ -18,7 +18,7 @@ export function Search(props: SearchProps) {
     const [audioUrl, setAudioUrl] = useState(DEFAULT_AUDIO_URL);
     const [trackId, setTrackId] = useState(DEFAULT_TRACK_ID);
     const [message, setMessage] = useState("");
-    useEffect(() => { 
+    useEffect(() => {
         setMessage("");
     }, [tracklist, load, searchparams])
     const startSearch = () => {
@@ -31,7 +31,7 @@ export function Search(props: SearchProps) {
                 setLoad(false)
                 if (answer.result) {
                     setTrackLists(answer.data)
-                } else{
+                } else {
                     setMessage(answer.message)
                 }
             });
@@ -58,8 +58,8 @@ export function Search(props: SearchProps) {
         setAudioUrl(data.audio);
         setNameSong(data.name);
         setAlbumImage(data.album_image);
-        setAuthor(data.album_name)
-        setTrackId(data.id)
+        setAuthor(data.album_name);
+        setTrackId(data.id);
     }
     function renderTrack(list: PlayListItemJumendoInterface[]) {
         if (list.length === 0) {
@@ -84,7 +84,7 @@ export function Search(props: SearchProps) {
             </div>
             <input type="button" className="search__action" id="search-btn" onClick={startSearch} value="Найти" />
         </div>
-        {message !== ""?<h5>{message}</h5>:""}
+        {message !== "" ? <h5>{message}</h5> : ""}
         {load ? <div className="search_content">Загрузка...</div> : <div id="albums-content" className="search_content">{renderTrack(tracklist)}</div>}
         <AudioPlayer setTrackToLover={setTrackToLover} author={author} audioUrl={audioUrl} length={tracklist.length} trackId={Number(trackId)} albumImage={albumImage} nameSong={nameSong} changeSong={changeSong} />
     </div>

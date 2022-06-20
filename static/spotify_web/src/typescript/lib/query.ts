@@ -18,21 +18,30 @@ export function postJSON(
                         const parsed = data.json();
                         return parsed;
                     }
+                    function jsonError(error: any) {
+                        return { result: false, message: error };
+                    }
 
-                    resolve(await errorDecorator(parseJson));
+                    resolve(await errorDecorator(parseJson, jsonError));
                 });
             });
         }
-        resolve(errorDecorator(getData));
+        function fetchError(message: any) {
+            alert("Error:" + message);
+            return false;
+        }
+
+        resolve(errorDecorator(getData, fetchError));
     });
 }
-async function errorDecorator(f: any) {
+async function errorDecorator(f: any, e: any) {
     try {
         return await f();
     } catch (error: unknown) {
-        return { result: false, message: error };
+        return e(error);
     }
 }
+
 export async function getJSON(url: string): Promise<DefaultJumendoRequest> {
     return new Promise((resolve, reject) => {
         function getData() {

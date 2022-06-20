@@ -4,6 +4,23 @@ import { PlayListItemJumendoInterface } from "../interfaces/PlayListInterface";
 import { PlayListProps } from "../interfaces/PlayListInterface";
 
 export function PlayList(props: PlayListProps) {
+    function renderListItemOld(list: PlayListItemJumendoInterface[]) {
+        if (list.length === 0) {
+            return [<h4 className="playlist__empty_list">Список пуст</h4>];
+        }
+        let sorted = [];
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].audio !== "") {
+                sorted.push(list[i])
+            }
+        }
+        let renderlist = [];
+        for (let j = 0; j < sorted.length; j++) {
+            renderlist.push(<PlayListItem setSong={props.setSong} item={sorted[j]} type={props.type} url={props.url} index={j} key={props.url + j} />)
+        }
+        return renderlist
+    }
+
     function renderListItem(list: PlayListItemJumendoInterface[]) {
         if (list.length === 0) {
             return [<h4 className="playlist__empty_list">Список пуст</h4>];
