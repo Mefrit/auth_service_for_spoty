@@ -73,96 +73,19 @@
                     </li>
                 </ul>
             </div>
-            <div class="content" id="root"></div>
+            <div class="content-page" id="root"><h4 class="init_message">Инициализация...</h4></div>
         </div>
 
         <div class="audio-player">
-            <!-- <div id="song-info-player"></div>
-            <div class="audio-player__interface">
-                <div class="action">
-                    <button class="action__back" id="play-back">
-                        <svg role="img" height="16" width="16" viewBox="0 0 16 16">
-                            <path
-                                d="M3.3 1a.7.7 0 01.7.7v5.15l9.95-5.744a.7.7 0 011.05.606v12.575a.7.7 0 01-1.05.607L4 9.149V14.3a.7.7 0 01-.7.7H1.7a.7.7 0 01-.7-.7V1.7a.7.7 0 01.7-.7h1.6z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="play-btn" id="play-pause">
-                        <svg
-                            role="img"
-                            class="play-btn__image"
-                            height="16"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            viewBox="0 0 16 16"
-                        >
-                            <path
-                                id="playSvgPath"
-                                d="M3 1.713a.7.7 0 011.05-.607l10.89 6.288a.7.7 0 010 1.212L4.05 14.894A.7.7 0 013 14.288V1.713z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="action__forward" id="play-forward">
-                        <svg
-                            role="img"
-                            height="16"
-                            class="play-btn__image"
-                            width="16"
-                            viewBox="0 0 16 16"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                d="M12.7 1a.7.7 0 00-.7.7v5.15L2.05 1.107A.7.7 0 001 1.712v12.575a.7.7 0 001.05.607L12 9.149V14.3a.7.7 0 00.7.7h1.6a.7.7 0 00.7-.7V1.7a.7.7 0 00-.7-.7h-1.6z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="action__progress">
-                    <span class="action__time" id="play-time-start">00:00</span>
-                    <input
-                        class="action__progress_range"
-                        id="play-progress"
-                        type="range"
-                        min="0"
-                        max="100"
-                        step="1"
-                        value="0"
-                    />
-                    <span class="action__time" id="play-time-end">00:00</span>
-                </div>
-            </div>
-            <div class="options">
-                <button class="options__volume-icon" id="play-sound-mute">
-                    <svg
-                        role="presentation"
-                        height="16"
-                        width="16"
-                        class="options__image"
-                        id="volume-icon"
-                        viewBox="0 0 16 16"
-                    >
-                        <path
-                            d="M9.741.85a.75.75 0 01.375.65v13a.75.75 0 01-1.125.65l-6.925-4a3.642 3.642 0 01-1.33-4.967 3.639 3.639 0 011.33-1.332l6.925-4a.75.75 0 01.75 0zm-6.924 5.3a2.139 2.139 0 000 3.7l5.8 3.35V2.8l-5.8 3.35zm8.683 4.29V5.56a2.75 2.75 0 010 4.88z"
-                        ></path>
-                        <path d="M11.5 13.614a5.752 5.752 0 000-11.228v1.55a4.252 4.252 0 010 8.127v1.55z"></path>
-                    </svg>
-                </button>
-                <input class="options__volume" id="play-volume" type="range" min="0" max="100" step="1" value="50" />
-            </div> -->
+          
         </div>
         <audio id="audio-player" style="opacity: 0" controls src="#">
             Your browser does not support the audio element.
         </audio>
     </body>
-    <!--static', filename='./spotify_web/public/style/css/main.css') -->
-
     <script>
         var exports = {};
     </script>
-    <!-- <script
-        src=" {{ url_for('static', filename='./spotify_web/public/script/js/App.js') }} "
-        type="text/javascript"
-    ></script> -->
     <script
         src="{{ url_for('static', filename='./spotify_web/node_modules/requirejs/require.js') }}"
         data-main="{{ url_for('static', filename='./spotify_web/public/script/js/index.js') }}"

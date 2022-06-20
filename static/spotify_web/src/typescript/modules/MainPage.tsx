@@ -94,7 +94,7 @@ export function MainPage(props: MainPageProps) {
     return <div>
         <Auth clientId={props.init.settings.CLIENT_ID} timeBlock={props.init.settings.TIME_TO_BLOCK} />
 
-        <div className="conten-react__content"> {renderContent(songlist)} </div>
+        <div className="content-react__content"> {renderContent(songlist)} </div>
         {
             tracklist[index] ?
                 <AudioPlayer

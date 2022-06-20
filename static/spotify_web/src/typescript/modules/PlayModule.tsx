@@ -72,8 +72,8 @@ export function Play(props: PlayProps) {
         const urlPlaylist = `https://api.jamendo.com/v3.0/users/tracks/?client_id=${props.init.settings.CLIENT_ID}&format=jsonpretty&user_id=${idUser}
                 &access_token=${accessToken}&limit=100`;
         const favorite: DefaultRequest = await getDataFromApi(urlPlaylist);
+        setLoadState(false)
         if (favorite.result) {
-            console.log("favorite",favorite)
             if (favorite.data.length === 0) {
                 return <h4 className="playlist__empty_list" >Список пуст</h4>;
             }
@@ -126,16 +126,17 @@ export function Play(props: PlayProps) {
     const changeSong = (index: number) => {
         setSong(playListInfo.songList[index])
     }
-    return <div className="conten-react" >
+    return <div className="content content-react  " >
         <Auth clientId={props.init.settings.CLIENT_ID} timeBlock={props.init.settings.TIME_TO_BLOCK} />
         {searchParams.get("mode") === "lovesongs" ? <div> <h3 className="playlist__title_lover">Избранное </h3> </div>: ""}
         {playListInfo.songList.length === 0 ? <h3 className="playlist__empty_list">Список пуст {loadState ? "(Загрузка...)" : ""}</h3> :
-            <div className="conten-react__content">
+            <div className="content-react__content">
                 <PlayList setSong={setSong} list={playListInfo.songList} title={playListInfo.title} type={playListInfo.type} url={playListInfo.url} />
             </div>}
 
-        {errorMsg === "" ? "" : errorMsg}
-        {searchParams.get("mode") === "lovesongs" ?  <p className="playlist__description_lover_song">Некоторые треки могут быть не доступны через API, для доступа к ним откройте сайт <a href="https://www.jamendo.com/start" className="playlist__link">Jumendo Music</a>.</p> :""}
+            {errorMsg === "" ? "" : <p className="playlist__description_lover_song">{errorMsg}</p>}
+            {searchParams.get("mode") === "lovesongs" && errorMsg === "" ?  <p className="playlist__description_lover_song">Некоторые треки могут быть не доступны через API, для доступа к ним откройте сайт <a href="https://www.jamendo.com/start" className="playlist__link">Jumendo Music</a>.</p> :""}
+
         <AudioPlayer
             author={songInfo.author}
             audioUrl={songInfo.audioUrl}
